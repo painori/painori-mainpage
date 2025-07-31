@@ -14,587 +14,9 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-functions.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
-    <style>
-        /* 기본 스타일 설정 */
-        body {
-            font-family: 'Poppins', 'Noto Sans KR', sans-serif;
-            background-color: #ffffff;
-            color: #1f2937;
-        }
-        
-        /* 심플하고 세련된 카드 스타일 */
-        .card {
-            background-color: white;
-            border-radius: 0.5rem;
-            box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
-            transition: all 0.3s ease;
-        }
-        
-        .card:hover {
-            box-shadow: 0 10px 25px -5px rgb(0 0 0 / 0.1);
-        }
-        
-        /* 버튼 스타일 - 더 모던하게 */
-        .btn-primary {
-            background-color: #f97316;
-            color: white;
-            font-weight: 600;
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.5rem;
-            transition: all 0.2s;
-            display: inline-block;
-            text-decoration: none;
-        }
-        
-        .btn-primary:hover {
-            background-color: #ea580c;
-            transform: translateY(-1px);
-        }
-        
-        /* 모바일에서 버튼 패딩 축소 */
-        @media (max-width: 640px) {
-            .btn-primary {
-                padding: 0.625rem 1.25rem;
-                font-size: 0.875rem;
-            }
-        }
-        
-        .btn-secondary {
-            background-color: #f3f4f6;
-            color: #374151;
-            font-weight: 500;
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.5rem;
-            transition: all 0.2s;
-        }
-        
-        .btn-secondary:hover {
-            background-color: #e5e7eb;
-        }
-        
-        @media (max-width: 640px) {
-            .btn-secondary {
-                padding: 0.625rem 1.25rem;
-                font-size: 0.875rem;
-            }
-        }
-        
-        .btn-disabled {
-            background-color: #e5e7eb;
-            color: #9ca3af;
-            cursor: not-allowed;
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.5rem;
-        }
-        
-        @media (max-width: 640px) {
-            .btn-disabled {
-                padding: 0.625rem 1.25rem;
-                font-size: 0.875rem;
-            }
-        }
-        
-        /* 작은 버튼 스타일 */
-        .btn-small {
-            padding: 0.25rem 0.5rem;
-            font-size: 0.75rem;
-            border-radius: 0.25rem;
-            font-weight: 500;
-        }
-        
-        .btn-edit {
-            background-color: #3b82f6;
-            color: white;
-        }
-        
-        .btn-edit:hover {
-            background-color: #2563eb;
-        }
-        
-        .btn-delete {
-            background-color: #ef4444;
-            color: white;
-        }
-        
-        .btn-delete:hover {
-            background-color: #dc2626;
-        }
-        
-        /* ✨ 새로 추가: 더보기 버튼 스타일 */
-        .btn-load-more {
-            background-color: #6b7280;
-            color: white;
-            font-weight: 500;
-            padding: 0.5rem 1rem;
-            border-radius: 0.375rem;
-            transition: all 0.2s;
-            border: none;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 1rem;
-        }
-        
-        .btn-load-more:hover {
-            background-color: #4b5563;
-        }
-        
-        .btn-load-more:disabled {
-            background-color: #e5e7eb;
-            color: #9ca3af;
-            cursor: not-allowed;
-        }
-        
-        /* ✨ 수정: Pi Browser 다운로드 버튼 - 파이 네트워크 보라색으로 변경 */
-        .btn-download {
-            /* 기존 초록색에서 Pi Network 보라색 그라데이션으로 변경 */
-            background: linear-gradient(135deg, #7C3AED, #A855F7);
-            color: white;
-            font-weight: 600;
-            padding: 0.5rem 1rem;
-            border-radius: 0.375rem;
-            font-size: 0.875rem;
-            transition: all 0.2s;
-            display: inline-block;
-            text-decoration: none;
-            /* Pi 브랜드 색상에 맞는 그림자 효과 추가 */
-            box-shadow: 0 2px 4px rgba(124, 58, 237, 0.3);
-        }
-        
-        .btn-download:hover {
-            /* 호버 시 더 진한 보라색으로 변경 */
-            background: linear-gradient(135deg, #6D28D9, #9333EA);
-            transform: translateY(-1px);
-            /* 호버 시 그림자도 더 진하게 */
-            box-shadow: 0 4px 8px rgba(124, 58, 237, 0.4);
-        }
-        
-        /* 언어 버튼 스타일 */
-        .lang-btn {
-            padding: 0.25rem 0.5rem;
-            font-size: 0.875rem;
-            color: #6b7280;
-            transition: color 0.2s;
-        }
-        
-        .lang-btn:hover {
-            color: #f97316;
-        }
-        
-        .lang-btn.active {
-            color: #f97316;
-            font-weight: 600;
-        }
-        
-        /* ✨ 개선: 뉴스 아이템 스타일 - Pi 블로그 전용 스타일 추가 */
-        .news-item {
-            display: flex;
-            align-items: center;
-            padding: 1rem;
-            background-color: #f9fafb;
-            border-radius: 0.5rem;
-            transition: all 0.2s;
-            margin-bottom: 0.5rem;
-        }
-        
-        .news-item:hover {
-            background-color: #f3f4f6;
-            transform: translateY(-1px);
-        }
-        
-        /* ✨ 새로 추가: Pi 블로그 뉴스 전용 스타일 */
-        .news-item.pi-blog {
-            background: linear-gradient(135deg, #faf5ff, #f3e8ff);
-            border-left: 4px solid #7c3aed;
-            position: relative;
-        }
-        
-        .news-item.pi-blog:hover {
-            background: linear-gradient(135deg, #f3e8ff, #e9d5ff);
-            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.15);
-        }
-        
-        .news-source {
-            flex-shrink: 0;
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: #6b7280;
-            width: 100px;
-            text-align: center;
-        }
-        
-        .news-source.pi-blog {
-            color: #7c3aed;
-            font-weight: 700;
-        }
-        
-        .news-title {
-            flex-grow: 1;
-            margin-left: 1rem;
-            color: #1f2937;
-            font-size: 0.875rem;
-            /* ✨ 새로 추가: 모바일 뉴스 제목 길이 제한 */
-            overflow: hidden;
-            text-overflow: ellipsis;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            line-clamp: 2;  /* ✨ 추가: 표준 속성 */
-            -webkit-box-orient: vertical;
-            line-height: 1.3;
-        }
-        
-        /* ✨ 모바일에서 뉴스 제목 1줄로 제한 */
-        @media (max-width: 640px) {
-            .news-title {
-                -webkit-line-clamp: 1;
-                line-clamp: 1;  /* ✨ 추가: 표준 속성 */
-                white-space: nowrap;
-                display: block;
-                -webkit-box-orient: initial;
-            }
-        }
-        
-        .news-title.pi-blog {
-            color: #5b21b6;
-            font-weight: 600;
-        }
-        
-        /* ✨ 새로 추가: Pi 블로그 Official 배지 */
-        .official-badge {
-            background-color: #7c3aed;
-            color: white;
-            font-size: 0.6rem;
-            padding: 0.125rem 0.375rem;
-            border-radius: 9999px;
-            font-weight: 600;
-            margin-left: 0.5rem;
-            text-transform: uppercase;
-        }
-        
-        /* ✨ 새로 추가: Pi 블로그 알림 메시지 */
-        .pi-blog-notice {
-            background: linear-gradient(135deg, #faf5ff, #f3e8ff);
-            border: 1px solid #c4b5fd;
-            border-radius: 0.5rem;
-            padding: 0.75rem;
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            font-size: 0.875rem;
-            color: #5b21b6;
-        }
-        
-        .pi-blog-notice .icon {
-            margin-right: 0.5rem;
-            font-size: 1rem;
-        }
-        
-        /* ✨ 새로 추가: 새 글 알림 스타일 */
-        .new-post-notification {
-            background: linear-gradient(135deg, #ecfdf5, #d1fae5);
-            border: 1px solid #a7f3d0;
-            border-radius: 0.5rem;
-            padding: 0.75rem;
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            font-size: 0.875rem;
-            color: #065f46;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        
-        .new-post-notification:hover {
-            background: linear-gradient(135deg, #d1fae5, #a7f3d0);
-        }
-        
-        .new-post-notification.hidden {
-            display: none;
-        }
-        
-        /* 로딩 스피너 */
-        .spinner {
-            border: 2px solid #f3f4f6;
-            border-top: 2px solid #f97316;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            animation: spin 1s linear infinite;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        /* ✨ 새로 추가: 작은 로딩 스피너 */
-        .spinner-small {
-            border: 2px solid #f3f4f6;
-            border-top: 2px solid #6b7280;
-            border-radius: 50%;
-            width: 16px;
-            height: 16px;
-            animation: spin 1s linear infinite;
-            margin-right: 0.5rem;
-        }
-        
-        /* 섹션 패딩 조정 */
-        .section-padding {
-            padding-top: 5rem;
-            padding-bottom: 5rem;
-        }
-        
-        /* 모바일 반응형 개선 */
-        @media (max-width: 768px) {
-            .section-padding {
-                padding-top: 3rem;
-                padding-bottom: 3rem;
-            }
-        }
-        
-        /* Pi Browser 정보 박스 스타일 변경 (덜 강조) */
-        .pi-info-box {
-            background-color: #f9fafb;
-            border: 1px solid #e5e7eb;
-            border-radius: 0.5rem;
-            padding: 0.75rem;
-            margin-top: 1rem;
-            font-size: 0.875rem;
-        }
-        
-        /* ✨ 새로 추가: 초대 코드 강조 스타일 */
-        .invite-code {
-            background-color: #fef3c7;
-            color: #92400e;
-            padding: 0.125rem 0.25rem;
-            border-radius: 0.25rem;
-            font-weight: 700;
-            font-family: 'Courier New', monospace;
-            border: 1px solid #fbbf24;
-        }
-        
-        /* 통계 관련 스타일 */
-        .stats-container {
-            background-color: #fefbff;
-            border: 1px solid #e879f9;
-            border-radius: 0.5rem;
-            padding: 1rem;
-            margin-bottom: 1.5rem;
-            text-align: center;
-        }
-        
-        .stats-item {
-            display: inline-block;
-            margin: 0 0.5rem;
-            font-size: 0.875rem;
-            color: #7c3aed;
-            font-weight: 500;
-        }
-        
-        @media (max-width: 640px) {
-            .stats-item {
-                display: block;
-                margin: 0.25rem 0;
-                font-size: 0.75rem;
-            }
-        }
-        
-        /* ✨ 수정: 게시글 모바일 2줄 레이아웃 - 핵심 수정사항 */
-        .post-item {
-            cursor: pointer;
-            transition: all 0.2s;
-            border-radius: 0.5rem;
-            padding: 1rem;
-            border: 1px solid #e5e7eb;
-            margin-bottom: 0.5rem;
-        }
-        
-        .post-item:hover {
-            background-color: #f9fafb;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        
-        /* ✨ 새로 추가: 새 게시글 하이라이트 */
-        .post-item.new-post {
-            border-left: 4px solid #10b981;
-            background-color: #f0fdf4;
-        }
-        
-        .post-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
-        }
-        
-        /* ✨ 새로운 모바일 2줄 레이아웃 스타일 */
-        @media (max-width: 640px) {
-            .post-header {
-                /* 모바일에서 세로 배치로 변경하여 2줄 레이아웃 구현 */
-                flex-direction: column;
-                align-items: stretch;
-                gap: 0.5rem;
-            }
-            
-            /* 첫 번째 줄: 제목과 액션 버튼들 */
-            .post-title-row {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                width: 100%;
-            }
-            
-            /* 두 번째 줄: 닉네임과 날짜 */
-            .post-meta-row {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                width: 100%;
-                font-size: 0.75rem;
-                color: #6b7280;
-                padding-top: 0.25rem;
-                border-top: 1px solid #f3f4f6;
-            }
-        }
-        
-        .post-title {
-            font-weight: bold;
-            color: #1f2937;
-            flex: 1;
-            cursor: pointer;
-            /* 제목 축약 처리 */
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-        
-        @media (max-width: 640px) {
-            .post-title {
-                max-width: 200px; /* 모바일: 제목 길이 제한 */
-            }
-        }
-        
-        @media (min-width: 641px) {
-            .post-title {
-                max-width: 300px; /* 데스크톱: 제목 길이 제한 */
-            }
-        }
-        
-        .post-meta {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            flex-shrink: 0;
-            font-size: 0.875rem;
-            color: #6b7280;
-        }
-        
-        /* 데스크톱에서는 기존 레이아웃 유지 */
-        @media (min-width: 641px) {
-            .post-meta {
-                display: flex;
-                align-items: center;
-                gap: 1rem;
-                flex-shrink: 0;
-                font-size: 0.875rem;
-                color: #6b7280;
-            }
-        }
-        
-        .post-nickname {
-            /* 닉네임 축약 처리 */
-            max-width: 120px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-        
-        .post-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease;
-            margin-top: 0;
-        }
-        
-        .post-content.expanded {
-            max-height: 500px;
-            margin-top: 0.75rem;
-            padding-top: 0.75rem;
-            border-top: 1px solid #e5e7eb;
-        }
-        
-        .post-actions {
-            opacity: 0;
-            transition: opacity 0.2s;
-            display: flex;
-            gap: 0.5rem;
-            margin-left: 1rem;
-        }
-        
-        /* ✨ 수정: 모바일에서는 내용 펼쳤을 때만 액션 버튼 표시 */
-        @media (max-width: 640px) {
-            .post-actions {
-                opacity: 0;
-                margin-left: 0;
-            }
-            
-            /* 내용이 펼쳐진 상태일 때만 버튼 표시 */
-            .post-item.content-expanded .post-actions {
-                opacity: 1;
-            }
-        }
-        
-        .post-item:hover .post-actions {
-            opacity: 1;
-        }
-        
-        /* ✨ 새로운 철학 섹션 아이콘 스타일 */
-        .philosophy-icon {
-            width: 4rem;
-            height: 4rem;
-            margin: 0 auto 1rem auto;
-            background-color: #fff7ed;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            transition: all 0.3s ease;
-        }
-        
-        .philosophy-icon:hover {
-            transform: scale(1.1);
-            background-color: #fed7aa;
-        }
-        
-        /* 각 철학 항목별 고유 색상 */
-        .philosophy-pi .philosophy-icon {
-            background-color: #fef3c7;
-            color: #f59e0b;
-        }
-        
-        .philosophy-pi .philosophy-icon:hover {
-            background-color: #fcd34d;
-        }
-        
-        .philosophy-ai .philosophy-icon {
-            background-color: #dbeafe;
-            color: #3b82f6;
-        }
-        
-        .philosophy-ai .philosophy-icon:hover {
-            background-color: #93c5fd;
-        }
-        
-        .philosophy-nori .philosophy-icon {
-            background-color: #dcfce7;
-            color: #22c55e;
-        }
-        
-        .philosophy-nori .philosophy-icon:hover {
-            background-color: #86efac;
-        }
-    </style>
+    <!-- 분리된 CSS 파일들 -->
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/mobile.css">
 </head>
 <body class="antialiased">
 
@@ -610,19 +32,36 @@
                     <a href="#philosophy" class="text-gray-600 hover:text-orange-500 transition" data-i18n="nav_philosophy">Philosophy</a>
                     <a href="#game" class="text-gray-600 hover:text-orange-500 transition" data-i18n="nav_game">Game</a>
                     <a href="#lounge" class="text-gray-600 hover:text-orange-500 transition" data-i18n="nav_lounge">Lounge</a>
-                    <div class="flex items-center space-x-1 border-l pl-6">
-                        <button class="lang-btn" data-lang="en">EN</button>
-                        <span class="text-gray-300">|</span>
-                        <button class="lang-btn" data-lang="ko">KR</button>
+                    
+                    <!-- 🌐 언어 선택 드롭다운 (데스크톱) -->
+                    <div class="relative border-l pl-6">
+                        <div class="language-dropdown">
+                            <button id="language-dropdown-btn" class="language-dropdown-btn">
+                                <span class="flag-icon text-lg">🌐</span>
+                                <span id="current-language-text" class="ml-1">English</span>
+                                <svg class="w-4 h-4 ml-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </button>
+                            <div id="language-dropdown-menu" class="language-dropdown-menu hidden">
+                                <!-- 언어 옵션들이 JavaScript로 동적 생성됨 -->
+                            </div>
+                        </div>
                     </div>
                 </nav>
 
                 <!-- 모바일 메뉴 버튼 -->
                 <div class="flex items-center space-x-4 md:hidden">
-                    <div class="flex items-center space-x-1">
-                        <button class="lang-btn" data-lang="en">EN</button>
-                        <span class="text-gray-300">|</span>
-                        <button class="lang-btn" data-lang="ko">KR</button>
+                    <!-- 🌐 언어 선택 드롭다운 (모바일) -->
+                    <div class="relative">
+                        <div class="language-dropdown mobile">
+                            <button id="mobile-language-dropdown-btn" class="language-dropdown-btn">
+                                <span class="flag-icon text-lg">🌐</span>
+                            </button>
+                            <div id="mobile-language-dropdown-menu" class="language-dropdown-menu hidden">
+                                <!-- 언어 옵션들이 JavaScript로 동적 생성됨 -->
+                            </div>
+                        </div>
                     </div>
                     <button id="mobile-menu-button" class="text-orange-500">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -645,14 +84,14 @@
     <main>
         <!-- 히어로 섹션 -->
         <section id="home" class="bg-gradient-to-b from-orange-50 to-white">
-            <div class="container mx-auto px-4 py-16 md:py-24 lg:py-32 text-center">
+            <div class="container mx-auto px-4 py-12 md:py-16 lg:py-20 text-center">
                 <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 leading-tight" data-i18n="hero_title">
                     Painori: Pi, AI, and Nori
                 </h1>
                 <p class="mt-4 text-sm sm:text-base md:text-lg lg:text-xl text-gray-600 max-w-3xl mx-auto" data-i18n="hero_subtitle">
                     We create enjoyable Nori (play) with AI technology on the Pi ecosystem.
                 </p>
-                <div class="mt-8 md:mt-10">
+                <div class="mt-6 md:mt-8">
                     <a href="#game" class="btn-primary" data-i18n="hero_cta">Play Our First Nori, SPOT NORI</a>
                 </div>
             </div>
@@ -661,16 +100,14 @@
         <!-- 뉴스 섹션 -->
         <section id="news" class="section-padding bg-white">
             <div class="container mx-auto px-4">
-                <div class="text-center mb-12">
+                <div class="text-center mb-8">
                     <h2 class="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-800" data-i18n="news_title">Stay Connected</h2>
-                    <p class="mt-4 text-base md:text-lg text-gray-600" data-i18n="news_subtitle">Don't miss the latest news from the Pi ecosystem.</p>
+                    <p class="mt-3 text-base md:text-lg text-gray-600" data-i18n="news_subtitle">Don't miss the latest news from the Pi ecosystem.</p>
                 </div>
                 <div class="max-w-4xl mx-auto">
-                    <!-- ✨ 수정: 탭 네비게이션 - 탭 이름 변경 -->
+                    <!-- 탭 네비게이션 -->
                     <div class="flex justify-center border-b mb-6">
-                        <!-- 기존 "Pi Network" → "Pi 공지"로 변경 -->
-                        <button data-tab="pi-news" class="tab-btn py-3 px-4 md:px-6 text-base md:text-lg font-semibold text-orange-500 border-b-2 border-orange-500" data-i18n="news_tab_pi">Pi 공지</button>
-                        <!-- 기존 "Crypto Market" → "Crypto News"로 변경 -->
+                        <button data-tab="pi-news" class="tab-btn py-3 px-4 md:px-6 text-base md:text-lg font-semibold text-orange-500 border-b-2 border-orange-500" data-i18n="news_tab_pi">Pi Updates</button>
                         <button data-tab="crypto-news" class="tab-btn py-3 px-4 md:px-6 text-base md:text-lg font-semibold text-gray-500 hover:text-gray-700" data-i18n="news_tab_crypto">Crypto News</button>
                     </div>
                     <!-- Pi 뉴스 -->
@@ -695,47 +132,38 @@
             </div>
         </section>
 
-        <!-- ✨ 수정: 철학 섹션 - 각 항목에 아이콘 추가 + 내용 축약 -->
+        <!-- 철학 섹션 -->
         <section id="philosophy" class="section-padding bg-gray-50">
             <div class="container mx-auto px-4">
-                <div class="text-center mb-12 md:mb-16">
+                <div class="text-center mb-8 md:mb-12">
                     <h2 class="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-800" data-i18n="philosophy_title">About Painori</h2>
-                    <p class="mt-4 text-base md:text-lg text-gray-600" data-i18n="philosophy_subtitle">Our philosophy began with deep experience and insight.</p>
+                    <p class="mt-3 text-base md:text-lg text-gray-600" data-i18n="philosophy_subtitle">Our philosophy began with deep experience and insight.</p>
                 </div>
                 <div class="grid md:grid-cols-3 gap-6 md:gap-8">
-                    <!-- Pi - Community (네트워크 아이콘 추가) -->
+                    <!-- Pi - Community -->
                     <div class="bg-white p-6 md:p-8 rounded-lg philosophy-pi">
                         <div class="text-center">
-                            <!-- 🌐 네트워크/생태계를 상징하는 아이콘 -->
-                            <div class="philosophy-icon">
-                                🌐
-                            </div>
+                            <div class="philosophy-icon">🌐</div>
                             <h3 class="text-xl md:text-2xl font-bold text-orange-500 mb-4" data-i18n="philosophy_pi_title">Pi - Community</h3>
                             <p class="text-sm md:text-base text-gray-600 leading-relaxed" data-i18n="philosophy_pi_desc">
                                 We focused on Pi Network's strong community potential. All Painori's 'Nori' exists for the Pioneers.
                             </p>
                         </div>
                     </div>
-                    <!-- AI - Technology (AI/기어 아이콘 추가) -->
+                    <!-- AI - Technology -->
                     <div class="bg-white p-6 md:p-8 rounded-lg philosophy-ai">
                         <div class="text-center">
-                            <!-- 🤖 AI/엔진을 상징하는 아이콘 -->
-                            <div class="philosophy-icon">
-                                🤖
-                            </div>
+                            <div class="philosophy-icon">🤖</div>
                             <h3 class="text-xl md:text-2xl font-bold text-orange-500 mb-4" data-i18n="philosophy_ai_title">AI - Technology</h3>
                             <p class="text-sm md:text-base text-gray-600 leading-relaxed" data-i18n="philosophy_ai_desc">
                                 AI technology transforms our game development ideas into reality with powerful efficiency.
                             </p>
                         </div>
                     </div>
-                    <!-- Nori - Play (타겟/게임 아이콘 추가) -->
+                    <!-- Nori - Play -->
                     <div class="bg-white p-6 md:p-8 rounded-lg philosophy-nori">
                         <div class="text-center">
-                            <!-- 🎯 목표/놀이를 상징하는 아이콘 -->
-                            <div class="philosophy-icon">
-                                🎯
-                            </div>
+                            <div class="philosophy-icon">🎯</div>
                             <h3 class="text-xl md:text-2xl font-bold text-orange-500 mb-4" data-i18n="philosophy_nori_title">Nori - Play</h3>
                             <p class="text-sm md:text-base text-gray-600 leading-relaxed" data-i18n="philosophy_nori_desc">
                                 Technology's ultimate goal is pure enjoyment. We create real playgrounds for everyone.
@@ -749,14 +177,13 @@
         <!-- 게임 쇼케이스 섹션 -->
         <section id="game" class="section-padding bg-white">
             <div class="container mx-auto px-4">
-                <div class="text-center mb-12">
+                <div class="text-center mb-8">
                     <h2 class="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-800" data-i18n="game_title">Our First 'Nori': SPOT NORI</h2>
-                    <p class="mt-4 text-base md:text-lg text-gray-600" data-i18n="game_subtitle">Introducing SPOT NORI, the first game embodying Painori's philosophy.</p>
+                    <p class="mt-3 text-base md:text-lg text-gray-600" data-i18n="game_subtitle">Introducing SPOT NORI, the first game embodying Painori's philosophy.</p>
                 </div>
                 <div class="card p-6 md:p-8 lg:p-12 max-w-5xl mx-auto">
                     <div class="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
                         <div class="flex justify-center">
-                            <!-- Firebase Storage 이미지 사용 -->
                             <img src="https://firebasestorage.googleapis.com/v0/b/painori-web.firebasestorage.app/o/splash.png?alt=media&token=fc1c9478-7fda-43b2-977a-ff248030b184" 
                                  alt="SPOT NORI" 
                                  class="rounded-lg shadow-lg w-full max-w-[200px] sm:max-w-[250px] md:max-w-[300px]">
@@ -768,7 +195,6 @@
                             </p>
                             
                             <div class="space-y-4">
-                                <!-- 테스트넷 버튼에 클릭 통계 기능 유지 -->
                                 <a href="https://testspot.painori.com" 
                                    target="_blank" 
                                    rel="noopener noreferrer" 
@@ -788,16 +214,13 @@
                                 </p>
                             </div>
                             
-                            <!-- Pi Browser 정보를 메인넷 문구 아래로 이동하고 덜 강조 -->
+                            <!-- Pi Browser 정보 -->
                             <div class="pi-info-box">
                                 <p class="text-gray-700 mb-3" data-i18n="game_pi_browser_info">
                                     🎮 For the best gaming experience, play on Pi Browser.<br>
                                     💰 When joining Pi Network, enter invite code <span class="invite-code">lukep81</span> to grow together!
                                 </p>
-                                <!-- ✨ 수정: Pi Browser 다운로드 버튼 - URL과 색상 변경 -->
                                 <div class="text-center">
-                                    <!-- 기존 URL: https://node.minepi.com/ → 새 URL: https://minepi.com/pi-browser -->
-                                    <!-- 기존 초록색 → 새로운 Pi Network 보라색 그라데이션 (CSS에서 정의) -->
                                     <a href="https://minepi.com/pi-browser" 
                                        target="_blank" 
                                        rel="noopener noreferrer" 
@@ -811,8 +234,8 @@
             </div>
         </section>
 
-        <!-- ✨ 새로 추가: 통계 섹션 (Pioneer's Lounge 위로 이동) -->
-        <section class="py-8 bg-gray-50 border-t">
+        <!-- 통계 섹션 -->
+        <section class="py-6 bg-gray-50 border-t">
             <div class="container mx-auto px-4">
                 <div class="max-w-4xl mx-auto">
                     <div class="stats-container">
@@ -833,22 +256,24 @@
         <!-- 라운지 섹션 -->
         <section id="lounge" class="section-padding bg-gray-50">
             <div class="container mx-auto px-4">
-                <div class="text-center mb-12">
+                <div class="text-center mb-8">
                     <h2 class="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-800" data-i18n="lounge_title">Pioneer's Lounge</h2>
-                    <p class="mt-4 text-base md:text-lg text-gray-600" data-i18n="lounge_subtitle">Feel free to talk about the Painori project and the Pi ecosystem.</p>
+                    <p class="mt-3 text-base md:text-lg text-gray-600" data-i18n="lounge_subtitle">Feel free to talk about the Painori project and the Pi ecosystem.</p>
                 </div>
                 <div class="max-w-4xl mx-auto">
                     <div class="bg-white p-4 md:p-6 rounded-lg shadow-sm">
                         
-                        <!-- ✨ 새로 추가: 새 글 알림 -->
+                        <!-- 새 글 알림 -->
                         <div id="new-post-notification" class="new-post-notification hidden">
                             <span data-i18n="new_post_available">새로운 글이 있습니다. 클릭하여 새로고침하세요.</span>
                             <span>📝</span>
                         </div>
                         
-                        <div class="flex justify-end mb-4">
+                        <!-- 새 글쓰기 버튼 (검색 UI 제거) -->
+                        <div class="mb-4 flex justify-end">
                             <button id="new-post-btn" class="btn-primary" data-i18n="lounge_new_post_btn">New Post</button>
                         </div>
+                        
                         <!-- 글쓰기 폼 -->
                         <div id="post-form-container" class="hidden mb-6 p-4 md:p-6 border rounded-lg bg-gray-50">
                             <h3 class="text-lg md:text-xl font-bold mb-4" data-i18n="lounge_form_title">Create New Post</h3>
@@ -913,19 +338,19 @@
                             </div>
                         </div>
                         
-                        <!-- ✨ 수정: 게시글 목록 - 페이지네이션 + 실시간 업데이트 적용 -->
+                        <!-- 게시글 목록 -->
                         <div id="post-list" class="space-y-2">
                             <div class="text-center py-8 text-gray-500" data-i18n="lounge_no_posts">
                                 No posts yet. Be the first to write one!
                             </div>
                         </div>
                         
-                        <!-- ✨ 새로 추가: 더보기 버튼 -->
+                        <!-- 더보기 버튼 -->
                         <button id="load-more-btn" class="btn-load-more hidden" data-i18n="load_more_posts">
                             Load More Posts
                         </button>
                         
-                        <!-- ✨ 새로 추가: 로딩 표시 -->
+                        <!-- 로딩 표시 -->
                         <div id="posts-loading" class="hidden text-center py-4">
                             <div class="spinner-small inline-block"></div>
                             <span class="text-gray-500" data-i18n="loading_posts">Loading posts...</span>
@@ -937,1054 +362,32 @@
     </main>
 
     <!-- 푸터 -->
-    <footer class="bg-gray-900 text-gray-300 py-8 md:py-10">
+    <footer class="bg-gray-900 text-gray-300 py-6 md:py-8">
         <div class="container mx-auto px-4 text-center">
             <p class="font-bold text-base md:text-lg text-white">Painori</p>
             <p class="mt-2 text-xs md:text-sm" data-i18n="footer_motto">Creating enjoyable experiences based on the philosophy of Pi, AI, and Nori.</p>
-            <div class="mt-4 md:mt-6 space-x-4 text-xs md:text-sm">
+            <div class="mt-3 md:mt-4 space-x-4 text-xs md:text-sm">
                 <a href="/privacy.html" class="hover:text-orange-400 transition" data-i18n="footer_privacy">Privacy Policy</a>
                 <span>|</span>
                 <a href="/terms.html" class="hover:text-orange-400 transition" data-i18n="footer_terms">Terms of Service</a>
             </div>
-            <p class="mt-4 md:mt-6 text-xs">Contact: lukep81@painori.com</p>
-            <p class="mt-4 text-xs opacity-75" data-i18n="footer_disclaimer">
+            <p class="mt-3 md:mt-4 text-xs">Contact: lukep81@painori.com</p>
+            <!-- 1인 개발자 서명 -->
+            <p class="mt-1 text-xs text-gray-500 italic" data-i18n="footer_solo_dev">
+                🤖 Built by a solo developer with AI superpowers
+            </p>
+            <p class="mt-3 text-xs opacity-75" data-i18n="footer_disclaimer">
                 © 2025 Painori. All Rights Reserved. Painori is an independently operated third-party project.
             </p>
         </div>
     </footer>
 
-    <script>
-        // Firebase 설정
-        const firebaseConfig = {
-            apiKey: "AIzaSyBa1u3tVq7NoFzD4gzndT_A_nDl2p_zfQk",
-            authDomain: "painori-web.firebaseapp.com",
-            projectId: "painori-web",
-            storageBucket: "painori-web.firebasestorage.app",
-            messagingSenderId: "423743376937",
-            appId: "1:423743376937:web:4e77251616508269d7d638",
-            measurementId: "G-4RHNE60YV5"
-        };
-        
-        // Firebase 초기화
-        const app = firebase.initializeApp(firebaseConfig);
-        const functions = firebase.functions();
-        const db = firebase.firestore();
-
-        // ✨ 새로 추가: 게시판 페이지네이션 관련 변수
-        let lastVisiblePost = null;
-        let isLoadingPosts = false;
-        let hasMorePosts = true;
-        let postsListener = null;
-        let loadedPostIds = new Set();
-
-        // 전역 변수 선언을 함수 호출 전으로 이동 (JavaScript 오류 수정)
-        let currentEditingPostId = null;
-        
-        // DOM 요소들 (DOMContentLoaded 이벤트 내에서 초기화)
-        let postList, newPostBtn, postFormContainer, editFormContainer;
-        let cancelPostBtn, submitPostBtn, cancelEditBtn, saveEditBtn;
-        let loadMoreBtn, postsLoading, newPostNotification;
-
-        // DOM이 로드된 후 실행
-        document.addEventListener('DOMContentLoaded', () => {
-            // DOM 요소 초기화를 맨 처음에 수행
-            postList = document.getElementById('post-list');
-            newPostBtn = document.getElementById('new-post-btn');
-            postFormContainer = document.getElementById('post-form-container');
-            editFormContainer = document.getElementById('edit-form-container');
-            cancelPostBtn = document.getElementById('cancel-post-btn');
-            submitPostBtn = document.getElementById('submit-post-btn');
-            cancelEditBtn = document.getElementById('cancel-edit-btn');
-            saveEditBtn = document.getElementById('save-edit-btn');
-            // ✨ 새로 추가된 DOM 요소들
-            loadMoreBtn = document.getElementById('load-more-btn');
-            postsLoading = document.getElementById('posts-loading');
-            newPostNotification = document.getElementById('new-post-notification');
-
-            // ✨ 수정: 다국어 번역 데이터 - 게시판 개선 관련 번역 추가
-            const translations = {
-                en: {
-                    nav_news: "News",
-                    nav_philosophy: "Philosophy",
-                    nav_game: "Game",
-                    nav_lounge: "Lounge",
-                    nav_news_mobile: "News",
-                    nav_philosophy_mobile: "Philosophy",
-                    nav_game_mobile: "Game",
-                    nav_lounge_mobile: "Lounge",
-                    hero_title: "Painori: Pi, AI, and Nori",
-                    hero_subtitle: "We create enjoyable Nori (play) with AI technology on the Pi ecosystem.",
-                    hero_cta: "Play Our First Nori, SPOT NORI",
-                    news_title: "Stay Connected",
-                    news_subtitle: "Don't miss the latest news from the Pi ecosystem.",
-                    // ✨ 탭 이름 변경: Pi Network → Pi Updates, Crypto Market → Crypto News
-                    news_tab_pi: "Pi Updates",
-                    news_tab_crypto: "Crypto News",
-                    news_loading: "Loading latest news...",
-                    news_error: "Failed to load news. Please try again later.",
-                    news_pi_blog_notice: "Latest news from official Pi Network blog!",
-                    philosophy_title: "About Painori",
-                    philosophy_subtitle: "Our philosophy began with deep experience and insight.",
-                    // ✨ 수정: 철학 섹션 제목 변경
-                    philosophy_pi_title: "Pi - Community",
-                    philosophy_pi_desc: "We focused on Pi Network's strong community potential. All Painori's 'Nori' exists for the Pioneers.",
-                    philosophy_ai_title: "AI - Technology",
-                    philosophy_ai_desc: "AI technology transforms our game development ideas into reality with powerful efficiency.",
-                    philosophy_nori_title: "Nori - Play",
-                    philosophy_nori_desc: "Technology's ultimate goal is pure enjoyment. We create real playgrounds for everyone.",
-                    game_title: "Our First 'Nori': SPOT NORI",
-                    game_subtitle: "Introducing SPOT NORI, the first game embodying Painori's philosophy.",
-                    game_feature_title: "Classic Spot-the-Difference, More Fun",
-                    game_feature_desc: "It's a classic spot-the-difference game to enjoy while focusing purely on your own skills, with colorful images generated by AI. Challenge new themes and test the limits of your observation.",
-                    game_pi_browser_info: "🎮 For the best gaming experience, play on Pi Browser.\n💰 When joining Pi Network, enter invite code lukep81 to grow together!",
-                    game_testnet_btn: "Join Testnet 🧪",
-                    game_testnet_desc: "Be the first to experience new features and help us complete the game!",
-                    game_mainnet_btn: "Mainnet (Coming Soon) ✨",
-                    game_mainnet_desc: "After thorough stability verification, we will launch the official version.",
-                    game_download_pi_browser: "📱 Download Pi Browser",
-                    lounge_title: "Pioneer's Lounge",
-                    lounge_subtitle: "Feel free to talk about the Painori project and the Pi ecosystem.",
-                    lounge_new_post_btn: "New Post",
-                    lounge_form_title: "Create New Post",
-                    lounge_edit_title: "Edit Post",
-                    lounge_form_nickname: "Nickname",
-                    lounge_form_password: "Password (for edit/delete)",
-                    lounge_form_title_placeholder: "Title",
-                    lounge_form_content: "Enter your content...",
-                    lounge_form_cancel: "Cancel",
-                    lounge_form_submit: "Submit",
-                    lounge_save_edit: "Save Changes",
-                    lounge_edit_btn: "Edit",
-                    lounge_delete_btn: "Delete",
-                    lounge_no_posts: "No posts yet. Be the first to write one!",
-                    // ✨ 새로 추가: 게시판 개선 관련 번역
-                    load_more_posts: "Load More Posts",
-                    loading_posts: "Loading posts...",
-                    new_post_available: "New post available. Click to refresh.",
-                    all_posts_loaded: "All posts loaded",
-                    stats_today: "Today",
-                    stats_total: "Total",
-                    stats_visitors: "visitors",
-                    stats_joined_testnet: "joined testnet",
-                    // ✨ 새로 추가: 통계 기준 설명
-                    stats_note: "(Unique visits per device/day)",
-                    footer_motto: "Creating enjoyable experiences based on the philosophy of Pi, AI, and Nori.",
-                    footer_privacy: "Privacy Policy",
-                    footer_terms: "Terms of Service",
-                    footer_disclaimer: "© 2025 Painori. All Rights Reserved. Painori is an independently operated third-party project."
-                },
-                ko: {
-                    nav_news: "최신 소식",
-                    nav_philosophy: "철학",
-                    nav_game: "게임",
-                    nav_lounge: "라운지",
-                    nav_news_mobile: "최신 소식",
-                    nav_philosophy_mobile: "철학",
-                    nav_game_mobile: "게임",
-                    nav_lounge_mobile: "라운지",
-                    hero_title: "Painori: Pi, AI, 그리고 놀이",
-                    hero_subtitle: "우리는 파이(Pi) 생태계 위에서, 인공지능(AI) 기술로, 즐거운 놀이(Nori)를 만듭니다.",
-                    hero_cta: "첫 번째 놀이, SPOT NORI 시작하기",
-                    news_title: "Stay Connected",
-                    news_subtitle: "파이 생태계의 주요 소식을 놓치지 마세요.",
-                    // ✨ 한국어 탭 이름: Pi Network → Pi 공지, Crypto Market → Crypto News
-                    news_tab_pi: "Pi 공지",
-                    news_tab_crypto: "Crypto News",
-                    news_loading: "최신 뉴스를 불러오는 중...",
-                    news_error: "뉴스를 불러오는데 실패했습니다. 잠시 후 다시 시도해주세요.",
-                    news_pi_blog_notice: "Pi Network 공식 블로그에서 최신 소식을 가져왔습니다!",
-                    philosophy_title: "About Painori",
-                    philosophy_subtitle: "우리의 철학은 깊은 경험과 통찰에서 시작되었습니다.",
-                    // ✨ 수정: 철학 섹션 제목 변경 + 내용 축약
-                    philosophy_pi_title: "Pi - Community",
-                    philosophy_pi_desc: "강력한 커뮤니티를 가진 Pi Network에 주목했습니다. Painori의 모든 놀이는 파이오니어들을 위해 존재합니다.",
-                    philosophy_ai_title: "AI - Technology", 
-                    philosophy_ai_desc: "AI 기술로 오랜 게임 개발 경험의 아이디어들을 효율적으로 현실화합니다.",
-                    philosophy_nori_title: "Nori - Play",
-                    philosophy_nori_desc: "기술의 최종 목적은 순수한 즐거움입니다. 모두를 위한 진짜 놀이터를 만듭니다.",
-                    game_title: "Our First 'Nori': SPOT NORI",
-                    game_subtitle: "Painori의 철학이 담긴 첫 번째 게임, SPOT NORI를 소개합니다.",
-                    game_feature_title: "클래식 틀린그림찾기, 그 이상의 재미",
-                    game_feature_desc: "AI로 생성된 다채로운 이미지를 통해, 온전히 자신에게 집중하며 즐기는 클래식 틀린그림찾기 게임입니다. 새로운 테마에 도전하며 관찰력의 한계를 시험해 보세요.",
-                    game_pi_browser_info: "🎮 최고의 게임 경험을 위해 Pi Browser에서 플레이하세요.\n💰 Pi Network 가입 시 초대 코드 lukep81을 입력하면 함께 성장할 수 있습니다!",
-                    game_testnet_btn: "테스트넷 참여하기 🧪",
-                    game_testnet_desc: "새로운 기능을 가장 먼저 경험하고, 게임을 함께 완성해주세요!",
-                    game_mainnet_btn: "메인넷 (준비 중) ✨",
-                    game_mainnet_desc: "안정성 검증을 마친 후, 공식 버전으로 찾아뵙겠습니다.",
-                    game_download_pi_browser: "📱 Pi Browser 다운로드",
-                    lounge_title: "Pioneer's Lounge",
-                    lounge_subtitle: "Painori 프로젝트와 파이 생태계에 대해 자유롭게 이야기해 보세요.",
-                    lounge_new_post_btn: "새 글쓰기",
-                    lounge_form_title: "새 글 작성",
-                    lounge_edit_title: "글 수정",
-                    lounge_form_nickname: "닉네임",
-                    lounge_form_password: "비밀번호 (수정/삭제용)",
-                    lounge_form_title_placeholder: "제목",
-                    lounge_form_content: "내용을 입력하세요...",
-                    lounge_form_cancel: "취소",
-                    lounge_form_submit: "등록",
-                    lounge_save_edit: "변경사항 저장",
-                    lounge_edit_btn: "수정",
-                    lounge_delete_btn: "삭제",
-                    lounge_no_posts: "아직 작성된 글이 없습니다. 첫 글을 작성해보세요!",
-                    // ✨ 새로 추가: 게시판 개선 관련 번역
-                    load_more_posts: "더 많은 글 보기",
-                    loading_posts: "글을 불러오는 중...",
-                    new_post_available: "새로운 글이 있습니다. 클릭하여 새로고침하세요.",
-                    all_posts_loaded: "모든 글을 불러왔습니다",
-                    stats_today: "오늘",
-                    stats_total: "전체",
-                    stats_visitors: "명 방문",
-                    stats_joined_testnet: "명 테스트넷 참여",
-                    // ✨ 새로 추가: 통계 기준 설명
-                    stats_note: "(기기별 1일 1회 중복 제거)",
-                    footer_motto: "Pi, AI, Nori의 철학을 바탕으로 즐거운 경험을 만듭니다.",
-                    footer_privacy: "개인정보처리방침",
-                    footer_terms: "이용약관",
-                    footer_disclaimer: "© 2025 Painori. All Rights Reserved. Painori는 독립적으로 운영되는 제3자 프로젝트입니다."
-                }
-            };
-
-            // 통계 관련 컬렉션
-            const statsCollection = db.collection("stats");
-            const dailyStatsCollection = db.collection("dailyStats");
-
-            // 방문자 통계 함수
-            async function updateVisitorStats() {
-                const today = new Date().toISOString().split('T')[0];
-                const userFingerprint = getUserFingerprint();
-                
-                try {
-                    // 오늘 이미 방문했는지 확인
-                    const visitorDoc = await dailyStatsCollection.doc(`${today}_${userFingerprint}`).get();
-                    
-                    if (!visitorDoc.exists) {
-                        // 새 방문자인 경우 카운트 증가
-                        await dailyStatsCollection.doc(`${today}_${userFingerprint}`).set({
-                            date: today,
-                            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                            userAgent: navigator.userAgent.substring(0, 100)
-                        });
-                        
-                        // 오늘 방문자 수 증가
-                        await dailyStatsCollection.doc(today).set({
-                            visitors: firebase.firestore.FieldValue.increment(1)
-                        }, { merge: true });
-                        
-                        // 전체 방문자 수 증가
-                        await statsCollection.doc('total').set({
-                            visitors: firebase.firestore.FieldValue.increment(1)
-                        }, { merge: true });
-                    }
-                } catch (error) {
-                    console.error('방문자 통계 업데이트 오류:', error);
-                }
-            }
-
-            // 테스트넷 클릭 통계 함수
-            async function updateTestnetStats() {
-                const today = new Date().toISOString().split('T')[0];
-                const userFingerprint = getUserFingerprint();
-                const lastClickKey = `testnet_click_${userFingerprint}`;
-                const lastClickTime = localStorage.getItem(lastClickKey);
-                const now = Date.now();
-                
-                // 1시간 쿨다운 체크 (3600000ms = 1시간)
-                if (lastClickTime && (now - parseInt(lastClickTime)) < 3600000) {
-                    console.log('테스트넷 클릭 쿨다운 중...');
-                    return;
-                }
-                
-                try {
-                    // 쿨다운 시간 기록
-                    localStorage.setItem(lastClickKey, now.toString());
-                    
-                    // 오늘 테스트넷 클릭 수 증가
-                    await dailyStatsCollection.doc(today).set({
-                        testnetClicks: firebase.firestore.FieldValue.increment(1)
-                    }, { merge: true });
-                    
-                    // 전체 테스트넷 클릭 수 증가
-                    await statsCollection.doc('total').set({
-                        testnetClicks: firebase.firestore.FieldValue.increment(1)
-                    }, { merge: true });
-                    
-                    // 통계 표시 업데이트
-                    loadStats();
-                } catch (error) {
-                    console.error('테스트넷 통계 업데이트 오류:', error);
-                }
-            }
-
-            // 사용자 지문 생성 함수
-            function getUserFingerprint() {
-                const canvas = document.createElement('canvas');
-                const ctx = canvas.getContext('2d');
-                ctx.textBaseline = 'top';
-                ctx.font = '14px Arial';
-                ctx.fillText('Painori fingerprint', 2, 2);
-                
-                return btoa(
-                    navigator.userAgent + 
-                    screen.width + screen.height + 
-                    canvas.toDataURL()
-                ).substring(0, 16);
-            }
-
-            // 통계 로드 함수
-            async function loadStats() {
-                const today = new Date().toISOString().split('T')[0];
-                
-                try {
-                    // 오늘 통계 로드
-                    const todayDoc = await dailyStatsCollection.doc(today).get();
-                    const todayStats = todayDoc.exists ? todayDoc.data() : {};
-                    
-                    // 전체 통계 로드
-                    const totalDoc = await statsCollection.doc('total').get();
-                    const totalStats = totalDoc.exists ? totalDoc.data() : {};
-                    
-                    // UI 업데이트
-                    document.getElementById('today-visitors').textContent = todayStats.visitors || 0;
-                    document.getElementById('today-testnet').textContent = todayStats.testnetClicks || 0;
-                    document.getElementById('total-visitors').textContent = totalStats.visitors || 0;
-                    document.getElementById('total-testnet').textContent = totalStats.testnetClicks || 0;
-                } catch (error) {
-                    console.error('통계 로드 오류:', error);
-                }
-            }
-
-            // 테스트넷 버튼 클릭 이벤트
-            document.getElementById('testnet-join-btn').addEventListener('click', function(e) {
-                // 클릭 통계 업데이트
-                updateTestnetStats();
-            });
-
-            // 언어 변경 함수
-            function changeLanguage(lang) {
-                document.documentElement.lang = lang;
-                localStorage.setItem('painori_lang', lang);
-
-                // data-i18n 속성을 가진 모든 요소의 텍스트 변경
-                document.querySelectorAll('[data-i18n]').forEach(el => {
-                    const key = el.dataset.i18n;
-                    if (translations[lang] && translations[lang][key]) {
-                        // Pi Browser 정보는 줄바꿈 처리
-                        if (key === 'game_pi_browser_info') {
-                            el.innerHTML = translations[lang][key].replace(/\n/g, '<br>').replace(/lukep81/g, '<span class="invite-code">lukep81</span>');
-                        } else {
-                            el.textContent = translations[lang][key];
-                        }
-                    }
-                });
-                
-                // placeholder 번역
-                document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-                    const key = el.dataset.i18nPlaceholder;
-                    if (translations[lang] && translations[lang][key]) {
-                        el.placeholder = translations[lang][key];
-                    }
-                });
-
-                // 언어 버튼 활성화 상태 업데이트
-                document.querySelectorAll('.lang-btn').forEach(btn => {
-                    if (btn.dataset.lang === lang) {
-                        btn.classList.add('active');
-                    } else {
-                        btn.classList.remove('active');
-                    }
-                });
-
-                // 게시글 목록 다시 렌더링
-                renderPosts(lang);
-            }
-
-            // 언어 버튼 클릭 이벤트
-            document.querySelectorAll('.lang-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    changeLanguage(e.target.dataset.lang);
-                });
-            });
-
-            // 초기 언어 설정
-            const savedLang = localStorage.getItem('painori_lang');
-            const browserLang = navigator.language.split('-')[0];
-            const initialLang = savedLang || (translations[browserLang] ? browserLang : 'en');
-            
-            // 모바일 메뉴 토글
-            const mobileMenuButton = document.getElementById('mobile-menu-button');
-            const mobileMenu = document.getElementById('mobile-menu');
-            mobileMenuButton.addEventListener('click', () => {
-                mobileMenu.classList.toggle('hidden');
-            });
-
-            // 부드러운 스크롤
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    const target = document.querySelector(this.getAttribute('href'));
-                    if (target) {
-                        target.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'start'
-                        });
-                    }
-                    // 모바일 메뉴 닫기
-                    if (!mobileMenu.classList.contains('hidden')) {
-                        mobileMenu.classList.add('hidden');
-                    }
-                });
-            });
-
-            // ✨ 개선된 뉴스 가져오기 함수 - Pi 블로그 RSS 우선 처리
-            async function fetchNews() {
-                const lang = document.documentElement.lang;
-                const currentTranslations = translations[lang] || translations.en;
-
-                const piNewsList = document.getElementById('pi-news-list');
-                const cryptoNewsList = document.getElementById('crypto-news-list');
-
-                // 로딩 표시
-                const loadingHTML = `
-                    <div class="text-center py-8">
-                        <div class="spinner mx-auto mb-4"></div>
-                        <p class="text-gray-500">${currentTranslations.news_loading}</p>
-                    </div>
-                `;
-                piNewsList.innerHTML = loadingHTML;
-                cryptoNewsList.innerHTML = loadingHTML;
-
-                try {
-                    // ✨ Pi Network 뉴스 가져오기 - RSS 우선 처리
-                    console.log('🔍 Pi Network 뉴스 요청 시작 (RSS 우선)');
-                    const getPiNews = functions.httpsCallable('getPiNews');
-                    const piResult = await getPiNews();
-                    
-                    console.log('📡 Pi News 응답:', piResult);
-                    
-                    // 강화된 데이터 검증
-                    if (piResult && 
-                        piResult.data && 
-                        typeof piResult.data === 'object' && 
-                        piResult.data.data && 
-                        Array.isArray(piResult.data.data)) {
-                        
-                        console.log('✅ Pi News 데이터 유효성 검증 통과');
-                        
-                        // ✨ Pi 블로그 RSS 뉴스인지 확인하고 특별 처리
-                        const isFromPiBlog = piResult.data.source === 'Pi Blog RSS';
-                        if (isFromPiBlog) {
-                            console.log('🥧 Pi 블로그 RSS 뉴스 사용!');
-                        }
-                        
-                        renderNews(piNewsList, piResult.data.data, lang, isFromPiBlog);
-                    } else {
-                        console.warn('⚠️ Pi News 데이터 형식 오류:', piResult);
-                        throw new Error('Invalid Pi News response format');
-                    }
-                } catch (error) {
-                    console.error('❌ Pi News 에러:', error);
-                    piNewsList.innerHTML = `<div class="text-center text-gray-500 p-4">${currentTranslations.news_error}</div>`;
-                }
-
-                try {
-                    // Crypto Market 뉴스 가져오기 (기존 방식 유지)
-                    console.log('🔍 Crypto Market 뉴스 요청 시작');
-                    const getCryptoNews = functions.httpsCallable('getCryptoNews');
-                    const cryptoResult = await getCryptoNews();
-                    
-                    console.log('📡 Crypto News 응답:', cryptoResult);
-                    
-                    // 강화된 데이터 검증
-                    if (cryptoResult && 
-                        cryptoResult.data && 
-                        typeof cryptoResult.data === 'object' && 
-                        cryptoResult.data.data && 
-                        Array.isArray(cryptoResult.data.data)) {
-                        
-                        console.log('✅ Crypto News 데이터 유효성 검증 통과');
-                        renderNews(cryptoNewsList, cryptoResult.data.data, lang, false);
-                    } else {
-                        console.warn('⚠️ Crypto News 데이터 형식 오류:', cryptoResult);
-                        throw new Error('Invalid Crypto News response format');
-                    }
-                } catch (error) {
-                    console.error('❌ Crypto News 에러:', error);
-                    cryptoNewsList.innerHTML = `<div class="text-center text-gray-500 p-4">${currentTranslations.news_error}</div>`;
-                }
-            }
-
-            // ✨ 개선된 뉴스 렌더링 함수 - Pi 블로그 전용 스타일 적용 + 이모지 제거 + 3개 제한
-            function renderNews(container, newsData, lang, isFromPiBlog = false) {
-                const currentTranslations = translations[lang] || translations.en;
-                container.innerHTML = '';
-                
-                // 추가 데이터 검증
-                if (!newsData || !Array.isArray(newsData) || newsData.length === 0) {
-                    container.innerHTML = `<div class="text-center text-gray-500 p-4">${currentTranslations.news_error}</div>`;
-                    return;
-                }
-                
-                // ✨ Pi 블로그 뉴스가 있는 경우 상단에 안내 메시지 표시 (이모지 제거)
-                if (isFromPiBlog) {
-                    const noticeDiv = document.createElement('div');
-                    noticeDiv.className = 'pi-blog-notice';
-                    noticeDiv.innerHTML = `
-                        <span>${currentTranslations.news_pi_blog_notice}</span>
-                    `;
-                    container.appendChild(noticeDiv);
-                }
-                
-                // ✨ 수정: 뉴스 개수를 5개에서 3개로 제한
-                newsData.slice(0, 3).forEach((news, index) => {
-                    // 개별 뉴스 아이템 유효성 검사
-                    if (!news || !news.title || !news.source) {
-                        return; // 유효하지 않은 뉴스 건너뛰기
-                    }
-                    
-                    const newsItem = document.createElement('a');
-                    newsItem.href = news.url || '#';
-                    newsItem.target = '_blank';
-                    newsItem.rel = 'noopener noreferrer';
-                    
-                    // ✨ Pi 블로그 뉴스인지 확인
-                    const isPiBlogNews = news.source.name === 'Pi Network Blog' || news.isFromRSS;
-                    
-                    // 클래스 적용
-                    newsItem.className = isPiBlogNews 
-                        ? 'news-item pi-blog block' 
-                        : 'news-item block';
-                    
-                    // ✨ 수정: 이모지 제거, Blog → Pi Blog 변경
-                    newsItem.innerHTML = `
-    <span class="news-source ${isPiBlogNews ? 'pi-blog' : ''}">${
-        isPiBlogNews ? 'Pi Blog <span class="official-badge">Official</span>' : (news.source.name || 'Unknown')
-    }</span>
-    <span class="news-title ${isPiBlogNews ? 'pi-blog' : ''}">${news.title}</span>
-`;
-                    container.appendChild(newsItem);
-                });
-            }
-
-            // 탭 전환 기능
-            const tabButtons = document.querySelectorAll('.tab-btn');
-            const tabContents = document.querySelectorAll('.tab-content');
-
-            tabButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    const tabId = button.dataset.tab;
-
-                    // 모든 탭 버튼 비활성화
-                    tabButtons.forEach(btn => {
-                        btn.classList.remove('text-orange-500', 'border-orange-500', 'border-b-2');
-                        btn.classList.add('text-gray-500');
-                    });
-
-                    // 클릭한 탭 버튼 활성화
-                    button.classList.add('text-orange-500', 'border-orange-500', 'border-b-2');
-                    button.classList.remove('text-gray-500');
-
-                    // 모든 탭 콘텐츠 숨기기
-                    tabContents.forEach(content => {
-                        content.classList.add('hidden');
-                    });
-
-                    // 선택한 탭 콘텐츠 표시
-                    document.getElementById(tabId).classList.remove('hidden');
-                });
-            });
-
-            const postsCollection = db.collection("posts");
-
-            // ✨ 새로 추가: 실시간 리스너 설정 함수
-            function setupPostsListener(lang) {
-                // 기존 리스너 해제
-                if (postsListener) {
-                    postsListener();
-                }
-
-                console.log('🔄 게시글 실시간 리스너 설정');
-                
-                // 최신 3개 게시글에 대한 실시간 리스너
-                postsListener = postsCollection
-                    .orderBy("createdAt", "desc")
-                    .limit(3)
-                    .onSnapshot((snapshot) => {
-                        const currentTranslations = translations[lang] || translations.en;
-                        
-                        snapshot.docChanges().forEach((change) => {
-                            if (change.type === "added") {
-                                const postId = change.doc.id;
-                                
-                                // 이미 로드된 게시글이 아닌 경우에만 알림 표시
-                                if (!loadedPostIds.has(postId)) {
-                                    showNewPostNotification(currentTranslations);
-                                }
-                            }
-                        });
-                    }, (error) => {
-                        console.error('❌ 실시간 리스너 에러:', error);
-                    });
-            }
-
-            // ✨ 새로 추가: 새 글 알림 표시 함수
-            function showNewPostNotification(translations) {
-                if (newPostNotification) {
-                    newPostNotification.classList.remove('hidden');
-                    newPostNotification.querySelector('[data-i18n="new_post_available"]').textContent = 
-                        translations.new_post_available;
-                }
-            }
-
-            // ✨ 새로 추가: 새 글 알림 클릭 이벤트
-            if (newPostNotification) {
-                newPostNotification.addEventListener('click', () => {
-                    // 페이지네이션 초기화하고 다시 로드
-                    lastVisiblePost = null;
-                    hasMorePosts = true;
-                    loadedPostIds.clear();
-                    renderPosts(document.documentElement.lang, true);
-                    newPostNotification.classList.add('hidden');
-                });
-            }
-
-            // ✨ 수정: 게시글 렌더링 함수 - 페이지네이션 + 실시간 업데이트 + 로딩 최적화
-            async function renderPosts(lang, isRefresh = false) {
-                if (!postList) return;
-                
-                if (isLoadingPosts) return; // 이미 로딩 중이면 중단
-                
-                const currentTranslations = translations[lang] || translations.en;
-                
-                try {
-                    isLoadingPosts = true;
-                    
-                    if (isRefresh) {
-                        // 새로고침인 경우 초기화
-                        postList.innerHTML = '';
-                        lastVisiblePost = null;
-                        hasMorePosts = true;
-                        loadedPostIds.clear();
-                        
-                        if (loadMoreBtn) {
-                            loadMoreBtn.classList.add('hidden');
-                        }
-                    }
-                    
-                    // 로딩 표시
-                    if (postsLoading) {
-                        postsLoading.classList.remove('hidden');
-                    }
-                    
-                    console.log('📄 게시글 목록 로딩 시작');
-                    
-                    // ✨ 로딩 최적화: 첫 3개 먼저 로딩
-                    let query = postsCollection
-                        .orderBy("createdAt", "desc")
-                        .limit(isRefresh ? 3 : 5); // 새로고침 시 3개, 더보기 시 5개
-                    
-                    if (lastVisiblePost) {
-                        query = query.startAfter(lastVisiblePost);
-                    }
-                    
-                    const snapshot = await query.get();
-                    
-                    // 로딩 숨김
-                    if (postsLoading) {
-                        postsLoading.classList.add('hidden');
-                    }
-                    
-                    if (snapshot.empty && !lastVisiblePost) {
-                        console.log('📄 게시글 없음');
-                        postList.innerHTML = `<div class="text-center py-8 text-gray-500">${currentTranslations.lounge_no_posts}</div>`;
-                        return;
-                    }
-                    
-                    if (snapshot.empty && lastVisiblePost) {
-                        // 더 이상 불러올 게시글 없음
-                        hasMorePosts = false;
-                        if (loadMoreBtn) {
-                            loadMoreBtn.textContent = currentTranslations.all_posts_loaded || 'All posts loaded';
-                            loadMoreBtn.disabled = true;
-                        }
-                        return;
-                    }
-                    
-                    console.log(`📄 ${snapshot.size}개 게시글 발견`);
-                    
-                    // 마지막 문서 업데이트
-                    lastVisiblePost = snapshot.docs[snapshot.docs.length - 1];
-                    
-                    snapshot.forEach((doc, index) => {
-                        const post = doc.data();
-                        const postId = doc.id;
-                        
-                        // 중복 방지
-                        if (loadedPostIds.has(postId)) {
-                            return;
-                        }
-                        loadedPostIds.add(postId);
-                        
-                        // 시간 처리
-                        let displayTime = '';
-                        if (post.createdAt && post.createdAt.toDate) {
-                            const date = post.createdAt.toDate();
-                            const timeFormat = lang === 'ko' ? 'ko-KR' : 'en-US';
-                            
-                            displayTime = date.toLocaleString(timeFormat, {
-                                month: '2-digit',
-                                day: '2-digit',
-                                hour: '2-digit',
-                                minute: '2-digit',
-                                hour12: lang === 'en'
-                            });
-                        } else if (post.date) {
-                            displayTime = post.date;
-                        } else {
-                            displayTime = lang === 'ko' ? '날짜 없음' : 'No date';
-                        }
-                        
-                        const postElement = document.createElement('div');
-                        postElement.className = 'post-item';
-                        postElement.dataset.postId = postId;
-                        
-                        // ✨ 새 게시글 하이라이트 (최근 1시간 내)
-                        const isNewPost = post.createdAt && 
-                            (Date.now() - post.createdAt.toDate().getTime()) < 3600000;
-                        if (isNewPost && !lastVisiblePost && index < 3) {
-                            postElement.classList.add('new-post');
-                        }
-                        
-                        postElement.innerHTML = `
-                            <div class="post-header">
-                                <!-- 데스크톱: 기존 한 줄 레이아웃 유지 -->
-                                <div class="post-title-row hidden sm:contents">
-                                    <div class="post-title" onclick="togglePostContent('${postId}')">${post.title}</div>
-                                    <div class="post-meta">
-                                        <span class="post-nickname">${post.nickname}</span>
-                                        <span class="text-gray-400">|</span>
-                                        <span>${displayTime}</span>
-                                    </div>
-                                    <div class="post-actions">
-                                        <button onclick="showEditForm('${postId}', '${post.title.replace(/'/g, "\\'")}', '${(post.content || '').replace(/'/g, "\\'")}')" 
-                                                class="btn-small btn-edit" 
-                                                data-i18n="lounge_edit_btn">Edit</button>
-                                        <button onclick="deletePost('${postId}')" 
-                                                class="btn-small btn-delete" 
-                                                data-i18n="lounge_delete_btn">Delete</button>
-                                    </div>
-                                </div>
-                                
-                                <!-- 모바일용: 2줄 레이아웃 -->
-                                <div class="sm:hidden">
-                                    <div class="post-title-row flex justify-between items-center mb-2">
-                                        <div class="post-title flex-1" onclick="togglePostContent('${postId}')">${post.title}</div>
-                                    </div>
-                                    <div class="post-meta-row flex justify-between items-center text-xs text-gray-500 pt-1 border-t border-gray-100">
-                                        <span class="post-nickname">${post.nickname}</span>
-                                        <span>${displayTime}</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div id="content-${postId}" class="post-content">
-                                <div class="p-3 bg-gray-50 rounded text-sm text-gray-700">
-                                    <p class="whitespace-pre-wrap">${post.content || (lang === 'ko' ? '내용이 없습니다.' : 'No content available.')}</p>
-                                    <!-- 모바일에서 내용 펼쳤을 때만 액션 버튼 표시 -->
-                                    <div class="post-actions sm:hidden mt-3 flex justify-end gap-2">
-                                        <button onclick="showEditForm('${postId}', '${post.title.replace(/'/g, "\\'")}', '${(post.content || '').replace(/'/g, "\\'")}')" 
-                                                class="btn-small btn-edit" 
-                                                data-i18n="lounge_edit_btn">Edit</button>
-                                        <button onclick="deletePost('${postId}')" 
-                                                class="btn-small btn-delete" 
-                                                data-i18n="lounge_delete_btn">Delete</button>
-                                    </div>
-                                </div>
-                            </div>
-                        `;
-                        postList.appendChild(postElement);
-                        
-                        // 번역 적용
-                        const editBtns = postElement.querySelectorAll('[data-i18n="lounge_edit_btn"]');
-                        const deleteBtns = postElement.querySelectorAll('[data-i18n="lounge_delete_btn"]');
-                        
-                        editBtns.forEach(btn => {
-                            if (currentTranslations.lounge_edit_btn) {
-                                btn.textContent = currentTranslations.lounge_edit_btn;
-                            }
-                        });
-                        deleteBtns.forEach(btn => {
-                            if (currentTranslations.lounge_delete_btn) {
-                                btn.textContent = currentTranslations.lounge_delete_btn;
-                            }
-                        });
-                    });
-                    
-                    // ✨ 더보기 버튼 표시/숨김
-                    if (loadMoreBtn && snapshot.size >= 5 && hasMorePosts) {
-                        loadMoreBtn.classList.remove('hidden');
-                        loadMoreBtn.disabled = false;
-                        loadMoreBtn.textContent = currentTranslations.load_more_posts;
-                    } else if (loadMoreBtn && !hasMorePosts) {
-                        loadMoreBtn.textContent = currentTranslations.all_posts_loaded || 'All posts loaded';
-                        loadMoreBtn.disabled = true;
-                    }
-                    
-                    console.log('✅ 게시글 렌더링 완료');
-                    
-                } catch (error) {
-                    console.error("❌ 게시글 로딩 에러:", error);
-                    if (postList) {
-                        postList.innerHTML = `<div class="text-center py-8 text-gray-500">${currentTranslations.news_error}</div>`;
-                    }
-                } finally {
-                    isLoadingPosts = false;
-                    if (postsLoading) {
-                        postsLoading.classList.add('hidden');
-                    }
-                }
-            }
-
-            // ✨ 새로 추가: 더보기 버튼 클릭 이벤트
-            if (loadMoreBtn) {
-                loadMoreBtn.addEventListener('click', () => {
-                    if (!isLoadingPosts && hasMorePosts) {
-                        renderPosts(document.documentElement.lang, false);
-                    }
-                });
-            }
-            
-            // ✨ 수정: 게시글 내용 토글 함수 - 모바일 버튼 표시 로직 추가
-            window.togglePostContent = function(postId) {
-                const contentElement = document.getElementById(`content-${postId}`);
-                const postElement = document.querySelector(`[data-post-id="${postId}"]`);
-                
-                if (contentElement) {
-                    contentElement.classList.toggle('expanded');
-                    
-                    // 모바일에서 내용 펼쳤을 때 버튼 표시 클래스 추가
-                    if (postElement) {
-                        if (contentElement.classList.contains('expanded')) {
-                            postElement.classList.add('content-expanded');
-                        } else {
-                            postElement.classList.remove('content-expanded');
-                        }
-                    }
-                }
-            };
-            
-            // 수정 폼 표시 함수
-            window.showEditForm = function(postId, title, content) {
-                currentEditingPostId = postId;
-                
-                document.getElementById('edit-title').value = title;
-                document.getElementById('edit-content-field').value = content;
-                document.getElementById('edit-password').value = '';
-                
-                // 다른 폼들 숨기기
-                postFormContainer.classList.add('hidden');
-                newPostBtn.classList.remove('hidden');
-                
-                // 수정 폼 표시
-                editFormContainer.classList.remove('hidden');
-            };
-            
-            // 게시글 삭제 함수
-            window.deletePost = async function(postId) {
-                const lang = document.documentElement.lang;
-                const confirmMessage = lang === 'ko' ? 
-                    '정말로 이 게시글을 삭제하시겠습니까?' : 
-                    'Are you sure you want to delete this post?';
-                
-                if (!confirm(confirmMessage)) return;
-                
-                const password = prompt(lang === 'ko' ? '비밀번호를 입력하세요:' : 'Enter password:');
-                if (!password) return;
-                
-                try {
-                    const doc = await postsCollection.doc(postId).get();
-                    if (doc.exists && doc.data().password === password) {
-                        await postsCollection.doc(postId).delete();
-                        console.log('✅ 게시글 삭제 성공');
-                        
-                        // 삭제된 게시글을 로드된 목록에서 제거
-                        loadedPostIds.delete(postId);
-                        renderPosts(lang, true);
-                        
-                        const successMessage = lang === 'ko' ? '게시글이 삭제되었습니다.' : 'Post deleted successfully.';
-                        alert(successMessage);
-                    } else {
-                        const errorMessage = lang === 'ko' ? '비밀번호가 틀렸습니다.' : 'Incorrect password.';
-                        alert(errorMessage);
-                    }
-                } catch (error) {
-                    console.error('❌ 게시글 삭제 에러:', error);
-                    const errorMessage = lang === 'ko' ? '삭제에 실패했습니다.' : 'Failed to delete post.';
-                    alert(errorMessage);
-                }
-            };
-
-            // 새 글쓰기 버튼
-            newPostBtn.addEventListener('click', () => {
-                postFormContainer.classList.remove('hidden');
-                editFormContainer.classList.add('hidden');
-                newPostBtn.classList.add('hidden');
-            });
-
-            // 취소 버튼
-            cancelPostBtn.addEventListener('click', () => {
-                postFormContainer.classList.add('hidden');
-                newPostBtn.classList.remove('hidden');
-                clearForm();
-            });
-            
-            // 수정 취소 버튼
-            cancelEditBtn.addEventListener('click', () => {
-                editFormContainer.classList.add('hidden');
-                currentEditingPostId = null;
-                clearEditForm();
-            });
-            
-            // 수정 저장 버튼
-            saveEditBtn.addEventListener('click', async () => {
-                if (!currentEditingPostId) return;
-                
-                const password = document.getElementById('edit-password').value.trim();
-                const title = document.getElementById('edit-title').value.trim();
-                const content = document.getElementById('edit-content-field').value.trim();
-                
-                if (!password || !title || !content) {
-                    alert('Please fill in all fields. / 모든 항목을 입력해주세요.');
-                    return;
-                }
-                
-                try {
-                    const doc = await postsCollection.doc(currentEditingPostId).get();
-                    if (doc.exists && doc.data().password === password) {
-                        await postsCollection.doc(currentEditingPostId).update({
-                            title: title,
-                            content: content,
-                            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-                        });
-                        
-                        console.log('✅ 게시글 수정 성공');
-                        renderPosts(document.documentElement.lang, true);
-                        editFormContainer.classList.add('hidden');
-                        currentEditingPostId = null;
-                        clearEditForm();
-                        
-                        const lang = document.documentElement.lang;
-                        const successMessage = lang === 'ko' ? '게시글이 수정되었습니다.' : 'Post updated successfully.';
-                        alert(successMessage);
-                    } else {
-                        const lang = document.documentElement.lang;
-                        const errorMessage = lang === 'ko' ? '비밀번호가 틀렸습니다.' : 'Incorrect password.';
-                        alert(errorMessage);
-                    }
-                } catch (error) {
-                    console.error('❌ 게시글 수정 에러:', error);
-                    const lang = document.documentElement.lang;
-                    const errorMessage = lang === 'ko' ? '수정에 실패했습니다.' : 'Failed to update post.';
-                    alert(errorMessage);
-                }
-            });
-
-            // 글 등록 버튼 - 서버 타임스탬프 적용
-            submitPostBtn.addEventListener('click', async () => {
-                const nickname = document.getElementById('post-nickname').value.trim();
-                const password = document.getElementById('post-password').value.trim();
-                const title = document.getElementById('post-title').value.trim();
-                const content = document.getElementById('post-content').value.trim();
-
-                if (!nickname || !password || !title || !content) {
-                    alert('Please fill in all fields. / 모든 항목을 입력해주세요.');
-                    return;
-                }
-                
-                console.log('📝 새 게시글 작성 시작');
-                
-                const newPost = {
-                    nickname,
-                    password, // 주의: 실제 서비스에서는 암호화 필요
-                    title,
-                    content,
-                    // 서버 타임스탬프로 저장 (UTC 기준)
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                    // 기존 데이터 호환성을 위해 date 필드도 유지
-                    date: new Date().toISOString().split('T')[0],
-                    // 추가 정보: 작성자의 시간대 정보 (선택사항)
-                    authorTimezone: Intl.DateTimeFormat().resolvedOptions().timeZone
-                };
-                
-                try {
-                    await postsCollection.add(newPost);
-                    console.log('✅ 게시글 저장 성공');
-                    
-                    // 새 글 작성 후 목록 새로고침
-                    renderPosts(document.documentElement.lang, true);
-                    postFormContainer.classList.add('hidden');
-                    newPostBtn.classList.remove('hidden');
-                    clearForm();
-                } catch (error) {
-                    console.error("❌ 게시글 저장 에러:", error);
-                    alert("Failed to post. Please try again. / 글을 등록하는데 실패했습니다.");
-                }
-            });
-            
-            // 폼 초기화 함수
-            function clearForm() {
-                document.getElementById('post-nickname').value = '';
-                document.getElementById('post-password').value = '';
-                document.getElementById('post-title').value = '';
-                document.getElementById('post-content').value = '';
-            }
-            
-            // 수정 폼 초기화 함수
-            function clearEditForm() {
-                document.getElementById('edit-password').value = '';
-                document.getElementById('edit-title').value = '';
-                document.getElementById('edit-content-field').value = '';
-            }
-
-            // ✨ 추가: Pi 블로그 상태 확인 함수 (디버깅용)
-            window.checkPiBlogStatus = async function() {
-                try {
-                    console.log('🔍 Pi 블로그 상태 확인 중...');
-                    const checkStatus = functions.httpsCallable('checkPiBlogStatus');
-                    const result = await checkStatus();
-                    
-                    console.log('📊 Pi 블로그 상태:', result.data);
-                    return result.data;
-                } catch (error) {
-                    console.error('❌ Pi 블로그 상태 확인 실패:', error);
-                    return null;
-                }
-            };
-
-            // ✨ 페이지 언로드 시 리스너 정리
-            window.addEventListener('beforeunload', () => {
-                if (postsListener) {
-                    postsListener();
-                }
-            });
-
-            // 초기화 순서 변경 (JavaScript 오류 방지)
-            // 1. 언어 설정
-            changeLanguage(initialLang);
-            
-            // 2. 통계 초기화
-            updateVisitorStats();
-            loadStats();
-            
-            // 3. 뉴스 로딩
-            fetchNews();
-            setInterval(fetchNews, 3600000); // 1시간마다 뉴스 업데이트
-            
-            // 4. 통계 정기 업데이트 (10분마다)
-            setInterval(loadStats, 600000);
-            
-            // 5. ✨ 새로 추가: 게시판 실시간 리스너 설정
-            setupPostsListener(initialLang);
-        });
-    </script>
+    <!-- 분리된 JavaScript 모듈들 -->
+    <script src="/js/firebase-config.js"></script>
+    <script src="/js/i18n-manager.js"></script>
+    <script src="/js/news-manager.js"></script>
+    <script src="/js/board-manager.js"></script>
+    <script src="/js/stats-manager.js"></script>
+    <script src="/js/ui-manager.js"></script>
 </body>
 </html>

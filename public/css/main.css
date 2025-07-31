@@ -1,0 +1,582 @@
+/* 
+ * Painori 메인 스타일시트
+ * 기본 레이아웃, 컴포넌트, 색상 시스템
+ */
+
+/* ===== 기본 설정 ===== */
+body {
+    font-family: 'Poppins', 'Noto Sans KR', sans-serif;
+    background-color: #ffffff;
+    color: #1f2937;
+}
+
+/* ===== 카드 컴포넌트 ===== */
+.card {
+    background-color: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    box-shadow: 0 10px 25px -5px rgb(0 0 0 / 0.1);
+}
+
+/* ===== 버튼 스타일 ===== */
+.btn-primary {
+    background-color: #f97316;
+    color: white;
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    transition: all 0.2s;
+    display: inline-block;
+    text-decoration: none;
+}
+
+.btn-primary:hover {
+    background-color: #ea580c;
+    transform: translateY(-1px);
+}
+
+.btn-secondary {
+    background-color: #f3f4f6;
+    color: #374151;
+    font-weight: 500;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    transition: all 0.2s;
+}
+
+.btn-secondary:hover {
+    background-color: #e5e7eb;
+}
+
+.btn-disabled {
+    background-color: #e5e7eb;
+    color: #9ca3af;
+    cursor: not-allowed;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+}
+
+/* 작은 버튼 스타일 */
+.btn-small {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+    border-radius: 0.25rem;
+    font-weight: 500;
+}
+
+.btn-edit {
+    background-color: #3b82f6;
+    color: white;
+}
+
+.btn-edit:hover {
+    background-color: #2563eb;
+}
+
+.btn-delete {
+    background-color: #ef4444;
+    color: white;
+}
+
+.btn-delete:hover {
+    background-color: #dc2626;
+}
+
+/* 더보기 버튼 */
+.btn-load-more {
+    background-color: #6b7280;
+    color: white;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    transition: all 0.2s;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 1rem;
+}
+
+.btn-load-more:hover {
+    background-color: #4b5563;
+}
+
+.btn-load-more:disabled {
+    background-color: #e5e7eb;
+    color: #9ca3af;
+    cursor: not-allowed;
+}
+
+/* 🔧 수정: Pi Browser 다운로드 버튼 - 기존 보라색에서 오렌지 계열로 변경 */
+.btn-download {
+    background: linear-gradient(135deg, #f97316, #ea580c);
+    color: white;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    transition: all 0.2s;
+    display: inline-block;
+    text-decoration: none;
+    box-shadow: 0 2px 4px rgba(249, 115, 22, 0.3);
+}
+
+.btn-download:hover {
+    background: linear-gradient(135deg, #ea580c, #c2410c);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(249, 115, 22, 0.4);
+}
+
+/* ===== 언어 버튼 ===== */
+.lang-btn {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    color: #6b7280;
+    transition: color 0.2s;
+}
+
+.lang-btn:hover {
+    color: #f97316;
+}
+
+.lang-btn.active {
+    color: #f97316;
+    font-weight: 600;
+}
+
+/* ===== 뉴스 관련 스타일 ===== */
+.news-item {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    background-color: #f9fafb;
+    border-radius: 0.5rem;
+    transition: all 0.2s;
+    margin-bottom: 0.5rem;
+}
+
+.news-item:hover {
+    background-color: #f3f4f6;
+    transform: translateY(-1px);
+}
+
+/* 🔧 수정: Pi 블로그 뉴스 스타일 - 과도한 보라색 효과 제거, 서브틀하게 변경 */
+.news-item.pi-blog {
+    background: linear-gradient(135deg, #fefbf7, #fef7ed);
+    border-left: 3px solid #f97316;
+    position: relative;
+}
+
+.news-item.pi-blog:hover {
+    background: linear-gradient(135deg, #fef7ed, #fed7aa);
+    box-shadow: 0 2px 8px rgba(249, 115, 22, 0.1);
+}
+
+.news-source {
+    flex-shrink: 0;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #6b7280;
+    width: 100px;
+    text-align: center;
+}
+
+.news-source.pi-blog {
+    color: #ea580c;
+    font-weight: 700;
+}
+
+.news-title {
+    flex-grow: 1;
+    margin-left: 1rem;
+    color: #1f2937;
+    font-size: 0.875rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    line-height: 1.3;
+}
+
+.news-title.pi-blog {
+    color: #c2410c;
+    font-weight: 600;
+}
+
+/* Pi 블로그 Official 배지 */
+.official-badge {
+    background-color: #f97316;
+    color: white;
+    font-size: 0.6rem;
+    padding: 0.125rem 0.375rem;
+    border-radius: 9999px;
+    font-weight: 600;
+    margin-left: 0.5rem;
+    text-transform: uppercase;
+}
+
+/* 🔧 수정: Pi 블로그 알림 메시지 - 색상 통일 */
+.pi-blog-notice {
+    background: linear-gradient(135deg, #fef7ed, #fed7aa);
+    border: 1px solid #fdba74;
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    font-size: 0.875rem;
+    color: #c2410c;
+}
+
+.pi-blog-notice .icon {
+    margin-right: 0.5rem;
+    font-size: 1rem;
+}
+
+/* ===== 새 글 알림 ===== */
+.new-post-notification {
+    background: linear-gradient(135deg, #ecfdf5, #d1fae5);
+    border: 1px solid #a7f3d0;
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.875rem;
+    color: #065f46;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.new-post-notification:hover {
+    background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+}
+
+.new-post-notification.hidden {
+    display: none;
+}
+
+/* ===== 로딩 스피너 ===== */
+.spinner {
+    border: 2px solid #f3f4f6;
+    border-top: 2px solid #f97316;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.spinner-small {
+    border: 2px solid #f3f4f6;
+    border-top: 2px solid #6b7280;
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    animation: spin 1s linear infinite;
+    margin-right: 0.5rem;
+}
+
+/* ===== 섹션 패딩 조정 ===== */
+.section-padding {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+}
+
+/* ===== Pi Browser 정보 박스 ===== */
+.pi-info-box {
+    background-color: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+    margin-top: 1rem;
+    font-size: 0.875rem;
+}
+
+/* 초대 코드 강조 */
+.invite-code {
+    background-color: #fef3c7;
+    color: #92400e;
+    padding: 0.125rem 0.25rem;
+    border-radius: 0.25rem;
+    font-weight: 700;
+    font-family: 'Courier New', monospace;
+    border: 1px solid #fbbf24;
+}
+
+/* ===== 통계 관련 스타일 ===== */
+.stats-container {
+    background-color: #fefbff;
+    border: 1px solid #e879f9;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.stats-item {
+    display: inline-block;
+    margin: 0 0.5rem;
+    font-size: 0.875rem;
+    color: #7c3aed;
+    font-weight: 500;
+}
+
+/* ===== 게시글 관련 스타일 ===== */
+.post-item {
+    cursor: pointer;
+    transition: all 0.2s;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    border: 1px solid #e5e7eb;
+    margin-bottom: 0.5rem;
+}
+
+.post-item:hover {
+    background-color: #f9fafb;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* 새 게시글 하이라이트 */
+.post-item.new-post {
+    border-left: 4px solid #10b981;
+    background-color: #f0fdf4;
+}
+
+.post-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.post-title {
+    font-weight: bold;
+    color: #1f2937;
+    flex: 1;
+    cursor: pointer;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 300px;
+}
+
+.post-meta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-shrink: 0;
+    font-size: 0.875rem;
+    color: #6b7280;
+}
+
+.post-nickname {
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.post-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    margin-top: 0;
+}
+
+.post-content.expanded {
+    max-height: 500px;
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid #e5e7eb;
+}
+
+.post-actions {
+    opacity: 0;
+    transition: opacity 0.2s;
+    display: flex;
+    gap: 0.5rem;
+    margin-left: 1rem;
+}
+
+.post-item:hover .post-actions {
+    opacity: 1;
+}
+
+/* ===== 철학 섹션 아이콘 ===== */
+.philosophy-icon {
+    width: 4rem;
+    height: 4rem;
+    margin: 0 auto 1rem auto;
+    background-color: #fff7ed;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    transition: all 0.3s ease;
+}
+
+.philosophy-icon:hover {
+    transform: scale(1.1);
+    background-color: #fed7aa;
+}
+
+/* 각 철학 항목별 고유 색상 */
+.philosophy-pi .philosophy-icon {
+    background-color: #fef3c7;
+    color: #f59e0b;
+}
+
+.philosophy-pi .philosophy-icon:hover {
+    background-color: #fcd34d;
+}
+
+.philosophy-ai .philosophy-icon {
+    background-color: #dbeafe;
+    color: #3b82f6;
+}
+
+.philosophy-ai .philosophy-icon:hover {
+    background-color: #93c5fd;
+}
+
+.philosophy-nori .philosophy-icon {
+    background-color: #dcfce7;
+    color: #22c55e;
+}
+
+.philosophy-nori .philosophy-icon:hover {
+    background-color: #86efac;
+}
+/* ===== 언어 드롭다운 스타일 ===== */
+.language-dropdown {
+    position: relative;
+}
+
+.language-dropdown-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;  /* ✅ space-x를 gap으로 변경 */
+    padding: 0.5rem;
+    border-radius: 0.375rem;
+    transition: all 0.2s;
+    cursor: pointer;
+    border: none;
+    background: none;
+}
+
+.language-dropdown-btn:hover {
+    background-color: #f9fafb;
+}
+
+.language-dropdown-menu {
+    position: absolute;
+    right: 0;
+    margin-top: 0.5rem;
+    width: 12rem;
+    background-color: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    border: 1px solid #e5e7eb;
+    padding: 0.5rem 0;
+    z-index: 50;
+    max-height: 16rem;
+    overflow-y: auto;
+}
+
+.language-option {
+    width: 100%;
+    text-align: left;
+    padding: 0.5rem 1rem;
+    transition: background-color 0.2s;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 0.875rem;
+}
+
+.language-option:hover {
+    background-color: #f97316;
+    color: white;
+}
+
+/* ===== 검색 관련 스타일 ===== */
+.search-container {
+    position: relative;
+}
+
+.search-container mark {
+    background-color: #fef3c7;
+    color: #92400e;
+    padding: 0.125rem 0.25rem;
+    border-radius: 0.25rem;
+    font-weight: 600;
+}
+
+.search-container input:focus {
+    box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+}
+/* ===== 언어 드롭다운 스타일 개선 ===== */
+.language-dropdown {
+    position: relative;
+}
+
+.language-dropdown-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.5rem;
+    border-radius: 0.375rem;
+    transition: all 0.2s;
+    cursor: pointer;
+    border: none;
+    background: none;
+    color: #6b7280;
+}
+
+.language-dropdown-btn:hover {
+    background-color: #f9fafb;
+    color: #f97316;
+}
+
+.language-dropdown-menu {
+    position: absolute;
+    right: 0;
+    margin-top: 0.5rem;
+    width: 12rem;
+    background-color: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    border: 1px solid #e5e7eb;
+    padding: 0.5rem 0;
+    z-index: 50;
+    max-height: 16rem;
+    overflow-y: auto;
+}
+
+.language-option {
+    width: 100%;
+    text-align: left;
+    padding: 0.5rem 1rem;
+    transition: background-color 0.2s;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 0.875rem;
+}
+
+.language-option:hover {
+    background-color: #f97316;
+    color: white;
+}
