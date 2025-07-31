@@ -71,5 +71,8 @@
   "language_select": "言語",
   "search_button": "検索",
   "search_clear": "クリア",
-  "footer_solo_dev": "🤖 一人の開発者とAIで作りました"
+  "footer_solo_dev": "🤖 一人の開発者とAIで作りました",
+  "game_testnet_btn": "無料体験 🎮",
+  "game_browser_notice": "💡 最高の体験のためにPiブラウザの使用を推奨します！",
+  "game_guest_mode_info": "一般ブラウザ：ゲストモード(制限あり) | Piブラウザ：全機能＋報酬"
 }

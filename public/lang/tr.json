@@ -71,5 +71,8 @@
   "language_select": "Dil",
   "search_button": "Ara",
   "search_clear": "Temizle",
-  "footer_solo_dev": "🤖 Yapay zeka süper güçlerine sahip tek bir geliştirici tarafından yapıldı"
+  "footer_solo_dev": "🤖 Yapay zeka süper güçlerine sahip tek bir geliştirici tarafından yapıldı",
+  "game_testnet_btn": "Ücretsiz Dene 🎮",
+  "game_browser_notice": "💡 En iyi deneyim için Pi Browser kullanılması önerilir!",
+  "game_guest_mode_info": "Normal Tarayıcı: Misafir Modu (Sınırlı) | Pi Browser: Tam Özellikler + Ödüller"
 }

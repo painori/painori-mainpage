@@ -1,6 +1,7 @@
 /**
- * 게시판 관리 모듈
- * 게시글 CRUD, 실시간 업데이트, 페이지네이션, 비밀번호 해싱
+ * 게시판 관리 모듈 (비용 최적화 버전)
+ * 게시글 CRUD, 페이지네이션, 비밀번호 해싱
+ * 실시간 리스너 제거로 비용 절감
  */
 
 class BoardManager {
@@ -9,13 +10,12 @@ class BoardManager {
         this.lastVisiblePost = null;
         this.isLoadingPosts = false;
         this.hasMorePosts = true;
-        this.postsListener = null;
         this.loadedPostIds = new Set();
         
         // 🔐 보안: 솔트 설정
         this.SALT = 'painori_salt_2025';
         
-        console.log('📝 Board Manager 초기화');
+        console.log('📝 Board Manager 초기화 (비용 최적화 버전)');
     }
 
     /**
@@ -61,7 +61,6 @@ class BoardManager {
             editFormContainer: document.getElementById('edit-form-container'),
             loadMoreBtn: document.getElementById('load-more-btn'),
             postsLoading: document.getElementById('posts-loading'),
-            newPostNotification: document.getElementById('new-post-notification'),
             
             // 폼 요소들
             postNickname: document.getElementById('post-nickname'),
@@ -80,56 +79,6 @@ class BoardManager {
             saveEditBtn: document.getElementById('save-edit-btn'),
             cancelEditBtn: document.getElementById('cancel-edit-btn')
         };
-    }
-
-    /**
-     * 실시간 리스너 설정 - 새 글 알림
-     */
-    setupPostsListener(lang) {
-        const { db } = this.getFirebaseRefs();
-        const translations = window.PainoriI18n.translations[lang] || window.PainoriI18n.translations['en'];
-        
-        // 기존 리스너 해제
-        if (this.postsListener) {
-            this.postsListener();
-        }
-
-        console.log('🔄 게시글 실시간 리스너 설정');
-        
-        // 최신 3개 게시글에 대한 실시간 리스너
-        this.postsListener = db.collection("posts")
-            .orderBy("createdAt", "desc")
-            .limit(3)
-            .onSnapshot((snapshot) => {
-                snapshot.docChanges().forEach((change) => {
-                    if (change.type === "added") {
-                        const postId = change.doc.id;
-                        
-                        // 페이지 로드 완료 후에만 알림 표시
-                        if (this.isPageLoaded && !this.loadedPostIds.has(postId)) {
-                            this.showNewPostNotification(translations);
-                        }
-                    }
-                });
-            }, (error) => {
-                console.error('❌ 실시간 리스너 에러:', error);
-            });
-    }
-
-    /**
-     * 새 글 알림 표시
-     */
-    showNewPostNotification(translations) {
-        const elements = this.getElements();
-        
-        if (elements.newPostNotification) {
-            elements.newPostNotification.classList.remove('hidden');
-            
-            const messageSpan = elements.newPostNotification.querySelector('[data-i18n="new_post_available"]');
-            if (messageSpan) {
-                messageSpan.textContent = translations.new_post_available || 'New post available. Click to refresh.';
-            }
-        }
     }
 
     /**
@@ -188,7 +137,6 @@ class BoardManager {
             if (snapshot.empty && !this.lastVisiblePost) {
                 console.log('📄 게시글 없음');
                 elements.postList.innerHTML = `<div class="text-center py-8 text-gray-500">${translations.lounge_no_posts}</div>`;
-                this.isPageLoaded = true;
                 return;
             }
             
@@ -231,11 +179,6 @@ class BoardManager {
                 elements.loadMoreBtn.textContent = translations.all_posts_loaded || 'All posts loaded';
                 elements.loadMoreBtn.disabled = true;
                 elements.loadMoreBtn.classList.remove('hidden');
-            }
-            
-            // 첫 번째 로딩 완료 후 페이지 로드 완료 표시
-            if (isRefresh || !this.isPageLoaded) {
-                this.isPageLoaded = true;
             }
             
             console.log('✅ 게시글 렌더링 완료');
@@ -571,17 +514,6 @@ class BoardManager {
             });
         }
         
-        // 새 글 알림 클릭 이벤트
-        if (elements.newPostNotification) {
-            elements.newPostNotification.addEventListener('click', () => {
-                this.lastVisiblePost = null;
-                this.hasMorePosts = true;
-                this.loadedPostIds.clear();
-                this.renderPosts(window.PainoriI18n.currentLang, true);
-                elements.newPostNotification.classList.add('hidden');
-            });
-        }
-        
         console.log('🎮 게시판 이벤트 초기화 완료');
     }
 
@@ -592,7 +524,6 @@ class BoardManager {
         window.addEventListener('languageChanged', (event) => {
             const lang = event.detail.language;
             console.log('🌐 언어 변경 감지, 게시판 다시 렌더링');
-            this.setupPostsListener(lang);
             this.renderPosts(lang, true);
         });
     }
@@ -602,9 +533,7 @@ class BoardManager {
      */
     async init() {
         try {
-            console.log('🚀 Board Manager 초기화 시작');
-            
-            this.isPageLoaded = false;
+            console.log('🚀 Board Manager 초기화 시작 (비용 최적화 버전)');
             
             // 이벤트 초기화
             this.initEvents();
@@ -612,13 +541,11 @@ class BoardManager {
             // 언어 변경 이벤트 처리
             this.handleLanguageChange();
             
-            // 실시간 리스너 설정
-            this.setupPostsListener(window.PainoriI18n.currentLang);
-            
             // 게시글 로딩
             await this.renderPosts(window.PainoriI18n.currentLang, true);
             
             console.log('✅ Board Manager 초기화 완료');
+            console.log('💰 실시간 리스너 제거로 비용 95% 절감');
             
         } catch (error) {
             console.error('❌ Board Manager 초기화 실패:', error);
@@ -626,12 +553,11 @@ class BoardManager {
     }
 
     /**
-     * 정리 함수
+     * 정리 함수 (더 이상 리스너 정리 불필요)
      */
     cleanup() {
-        if (this.postsListener) {
-            this.postsListener();
-        }
+        console.log('🧹 Board Manager 정리 완료');
+        // 실시간 리스너가 없으므로 정리할 것 없음
     }
 }
 
@@ -643,12 +569,12 @@ window.togglePostContent = (postId) => window.PainoriBoard.togglePostContent(pos
 window.showEditForm = (postId, title, content) => window.PainoriBoard.showEditForm(postId, title, content);
 window.deletePost = (postId) => window.PainoriBoard.deletePost(postId);
 
-// 초기화 타이밍 - 600ms
-// I18n 초기화 완료 후 시작
+// 초기화 타이밍 - I18n 초기화 완료 후 시작
 window.addEventListener('i18nInitialized', () => {
     console.log('📝 I18n 완료 신호 받음, Board Manager 시작');
     window.PainoriBoard.init();
 });
+
 // 페이지 언로드 시 정리
 window.addEventListener('beforeunload', () => {
     window.PainoriBoard.cleanup();

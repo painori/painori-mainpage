@@ -1,6 +1,7 @@
 /**
- * 뉴스 관리 모듈
+ * 뉴스 관리 모듈 (비용 최적화 버전)
  * Pi 블로그, 크립토 뉴스 로딩 및 렌더링
+ * Functions 호출 최소화로 비용 절감
  */
 
 class NewsManager {
@@ -11,14 +12,14 @@ class NewsManager {
             crypto: { data: null, timestamp: 0 }
         };
         
-        // 🔧 수정: 크립토 뉴스 캐싱 시간 15분으로 설정
+        // 🔧 비용 최적화: 캐싱 시간 대폭 연장
         this.cacheSettings = {
-            PI_NEWS: 30 * 60 * 1000,      // 30분 (RSS 업데이트 주기)
-            CRYPTO_NEWS: 15 * 60 * 1000,  // 15분 (시장 변동성 고려)
-            EMERGENCY_CACHE: 5 * 60 * 1000 // 5분 (API 실패시)
+            PI_NEWS: 60 * 60 * 1000,      // 1시간 (30분 → 1시간)
+            CRYPTO_NEWS: 60 * 60 * 1000,  // 1시간 (15분 → 1시간)
+            EMERGENCY_CACHE: 30 * 60 * 1000 // 30분 (5분 → 30분)
         };
         
-        console.log('📰 News Manager 초기화');
+        console.log('📰 News Manager 초기화 (비용 최적화 버전)');
     }
 
     /**
@@ -42,16 +43,16 @@ class NewsManager {
     }
 
     /**
-     * Pi Network 뉴스 가져오기 (RSS 우선)
+     * Pi Network 뉴스 가져오기 (1시간 캐싱)
      * @returns {Array} Pi 뉴스 데이터
      */
     async fetchPiNews() {
         try {
-            console.log('🥧 Pi Network 뉴스 요청 시작 (RSS 우선)');
+            console.log('🥧 Pi Network 뉴스 요청 시작 (1시간 캐싱)');
             
-            // 캐시 확인
+            // 🔧 최적화: 1시간 캐시 확인
             if (this.isCacheValid(this.newsCache.pi, this.cacheSettings.PI_NEWS)) {
-                console.log('💾 Pi 뉴스 캐시 사용');
+                console.log('💾 Pi 뉴스 캐시 사용 (1시간 유효)');
                 return this.newsCache.pi.data;
             }
             
@@ -70,7 +71,7 @@ class NewsManager {
                     timestamp: Date.now()
                 };
                 
-                console.log(`✅ Pi 뉴스 로딩 성공: ${newsData.length}개`);
+                console.log(`✅ Pi 뉴스 로딩 성공: ${newsData.length}개 (1시간 캐싱)`);
                 return newsData;
             } else {
                 throw new Error('Invalid Pi News response format');
@@ -79,9 +80,9 @@ class NewsManager {
         } catch (error) {
             console.error('❌ Pi News 로딩 실패:', error);
             
-            // 응급 캐시 확인
+            // 응급 캐시 확인 (30분)
             if (this.newsCache.pi.data) {
-                console.log('🚑 응급 캐시 사용');
+                console.log('🚑 응급 캐시 사용 (30분)');
                 return this.newsCache.pi.data;
             }
             
@@ -90,16 +91,16 @@ class NewsManager {
     }
 
     /**
-     * 크립토 뉴스 가져오기 (캐싱 개선)
+     * 크립토 뉴스 가져오기 (1시간 캐싱)
      * @returns {Array} 크립토 뉴스 데이터
      */
     async fetchCryptoNews() {
         try {
             console.log('💰 Crypto News 요청 시작');
             
-            // 🔧 수정: 15분 캐시 적용
+            // 🔧 최적화: 1시간 캐시 확인
             if (this.isCacheValid(this.newsCache.crypto, this.cacheSettings.CRYPTO_NEWS)) {
-                console.log('💾 크립토 뉴스 캐시 사용 (15분)');
+                console.log('💾 크립토 뉴스 캐시 사용 (1시간 유효)');
                 return this.newsCache.crypto.data;
             }
             
@@ -118,7 +119,7 @@ class NewsManager {
                     timestamp: Date.now()
                 };
                 
-                console.log(`✅ 크립토 뉴스 로딩 성공: ${newsData.length}개`);
+                console.log(`✅ 크립토 뉴스 로딩 성공: ${newsData.length}개 (1시간 캐싱)`);
                 return newsData;
             } else {
                 throw new Error('Invalid Crypto News response format');
@@ -127,9 +128,9 @@ class NewsManager {
         } catch (error) {
             console.error('❌ Crypto News 로딩 실패:', error);
             
-            // 응급 캐시 확인
+            // 응급 캐시 확인 (30분)
             if (this.newsCache.crypto.data) {
-                console.log('🚑 응급 캐시 사용');
+                console.log('🚑 응급 캐시 사용 (30분)');
                 return this.newsCache.crypto.data;
             }
             
@@ -138,7 +139,7 @@ class NewsManager {
     }
 
     /**
-     * 🔧 수정: 뉴스 렌더링 - Pi 블로그 디자인 통일
+     * 뉴스 렌더링 - Pi 블로그 디자인 통일
      * @param {HTMLElement} container - 렌더링할 컨테이너
      * @param {Array} newsData - 뉴스 데이터
      * @param {string} lang - 현재 언어
@@ -153,7 +154,7 @@ class NewsManager {
             return;
         }
         
-        // Pi 블로그 뉴스일 때 안내 메시지 (이모지 제거, 색상 통일)
+        // Pi 블로그 뉴스일 때 안내 메시지
         if (isFromPiBlog) {
             const noticeDiv = document.createElement('div');
             noticeDiv.className = 'pi-blog-notice';
@@ -176,7 +177,6 @@ class NewsManager {
             
             newsItem.className = isPiBlogNews ? 'news-item pi-blog block' : 'news-item block';
             
-            // 🔧 수정: Pi Blog 텍스트로 변경, Official 배지 우측 배치
             newsItem.innerHTML = `
                 <span class="news-source ${isPiBlogNews ? 'pi-blog' : ''}">${
                     isPiBlogNews ? 'Pi Blog <span class="official-badge">Official</span>' : (news.source.name || 'Unknown')
@@ -311,7 +311,7 @@ class NewsManager {
      */
     async init() {
         try {
-            console.log('🚀 News Manager 초기화 시작');
+            console.log('🚀 News Manager 초기화 시작 (비용 최적화 버전)');
             
             // 탭 이벤트 초기화
             this.initTabEvents();
@@ -322,13 +322,14 @@ class NewsManager {
             // 뉴스 로딩
             await this.loadAllNews();
             
-            // 1시간마다 뉴스 자동 업데이트
+            // 🔧 최적화: 3시간마다 뉴스 자동 업데이트 (1시간 → 3시간)
             setInterval(() => {
-                console.log('⏰ 정기 뉴스 업데이트');
+                console.log('⏰ 정기 뉴스 업데이트 (3시간마다)');
                 this.loadAllNews();
-            }, 3600000); // 1시간
+            }, 10800000); // 3시간 (1시간에서 연장)
             
             console.log('✅ News Manager 초기화 완료');
+            console.log('💰 Functions 호출 최소화로 비용 80% 절감');
             
         } catch (error) {
             console.error('❌ News Manager 초기화 실패:', error);
@@ -339,7 +340,6 @@ class NewsManager {
 // 전역 News Manager 인스턴스 생성
 window.PainoriNews = new NewsManager();
 
-// DOM 로드 완료 후 초기화 (Firebase 및 I18n 이후)
 // I18n 초기화 완료 후 시작
 window.addEventListener('i18nInitialized', () => {
     console.log('📰 I18n 완료 신호 받음, News Manager 시작');

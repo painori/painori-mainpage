@@ -71,5 +71,8 @@
   "language_select": "Bahasa",
   "search_button": "Cari",
   "search_clear": "Kosongkan",
-  "footer_solo_dev": "🤖 Dibina oleh pembangun solo dengan kuasa hebat AI"
+  "footer_solo_dev": "🤖 Dibina oleh pembangun solo dengan kuasa hebat AI",
+  "game_testnet_btn": "Cuba Percuma 🎮",
+  "game_browser_notice": "💡 Untuk pengalaman terbaik, disyorkan menggunakan Pelayar Pi!",
+  "game_guest_mode_info": "Pelayar Biasa: Mod Tetamu (Terhad) | Pelayar Pi: Ciri Penuh + Ganjaran"
 }

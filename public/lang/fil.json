@@ -71,5 +71,8 @@
   "language_select": "Wika",
   "search_button": "Hanapin",
   "search_clear": "Burahin",
-  "footer_solo_dev": "🤖 Nilikha ng isang solo developer gamit ang AI superpowers"
+  "footer_solo_dev": "🤖 Nilikha ng isang solo developer gamit ang AI superpowers",
+  "game_testnet_btn": "Subukan nang Libre 🎮",
+  "game_browser_notice": "💡 Para sa pinakamahusay na karanasan, inirerekomenda ang paggamit ng Pi Browser!",
+  "game_guest_mode_info": "Regular Browser: Guest Mode (Limited) | Pi Browser: Buong Features + Rewards"
 }

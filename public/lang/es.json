@@ -71,5 +71,8 @@
   "language_select": "Idioma",
   "search_button": "Buscar",
   "search_clear": "Limpiar",
-  "footer_solo_dev": "🤖 Creado por un desarrollador solo con superpoderes de IA"
+  "footer_solo_dev": "🤖 Creado por un desarrollador solo con superpoderes de IA",
+  "game_testnet_btn": "Prueba gratis 🎮",
+  "game_browser_notice": "💡 ¡Para la mejor experiencia, se recomienda usar Pi Browser!",
+  "game_guest_mode_info": "Navegador normal: Modo Invitado (Limitado) | Pi Browser: Funciones completas + Recompensas"
 }

@@ -71,5 +71,8 @@
   "language_select": "Taal",
   "search_button": "Soek",
   "search_clear": "Maak skoon",
-  "footer_solo_dev": "🤖 Gebou deur 'n solo-ontwikkelaar met KI-superkragte"
+  "footer_solo_dev": "🤖 Gebou deur 'n solo-ontwikkelaar met KI-superkragte",
+  "game_testnet_btn": "Probeer Gratis 🎮",
+  "game_browser_notice": "💡 Vir die beste ervaring word die gebruik van Pi Browser aanbeveel!",
+  "game_guest_mode_info": "Gewone Blaaier: Gasmodus (Beperk) | Pi Browser: Volledige Kenmerke + Belonings"
 }

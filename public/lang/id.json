@@ -71,5 +71,8 @@
   "language_select": "Bahasa",
   "search_button": "Cari",
   "search_clear": "Hapus",
-  "footer_solo_dev": "🤖 Dibuat oleh developer tunggal dengan kekuatan super AI"
+  "footer_solo_dev": "🤖 Dibuat oleh developer tunggal dengan kekuatan super AI",
+  "game_testnet_btn": "Coba Gratis 🎮",
+  "game_browser_notice": "💡 Untuk pengalaman terbaik, disarankan menggunakan Pi Browser!",
+  "game_guest_mode_info": "Browser Biasa: Mode Tamu (Terbatas) | Pi Browser: Fitur Penuh + Hadiah"
 }

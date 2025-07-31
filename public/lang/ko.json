@@ -79,5 +79,8 @@
   "language_select": "언어 선택",
   "search_button": "검색",
   "search_clear": "검색어 지우기",
-  "footer_solo_dev": "🤖  1인 개발자와 AI가 함께 만든 작품"
+  "footer_solo_dev": "🤖  1인 개발자와 AI가 함께 만든 작품",
+  "game_testnet_btn": "무료 체험하기 🎮",
+  "game_browser_notice": "💡 최고의 경험을 위해 Pi Browser 사용을 권장합니다!",
+  "game_guest_mode_info": "일반 브라우저: 게스트 모드 (제한됨) | Pi Browser: 전체 기능 + 보상"
 }

@@ -71,5 +71,8 @@
   "language_select": "语言",
   "search_button": "搜索",
   "search_clear": "清除",
-  "footer_solo_dev": "🤖 一位开发者与AI超能力共同打造"
+  "footer_solo_dev": "🤖 一位开发者与AI超能力共同打造",
+  "game_testnet_btn": "免费体验 🎮",
+  "game_browser_notice": "💡 为获得最佳体验，推荐使用Pi浏览器！",
+  "game_guest_mode_info": "普通浏览器：访客模式(受限) | Pi浏览器：完整功能 + 奖励"
 }

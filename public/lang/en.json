@@ -79,5 +79,8 @@
   "language_select": "Select Language",
   "search_button": "Search",
   "search_clear": "Clear",
-  "footer_solo_dev": "🤖 Built by a solo developer with AI superpowers"
+  "footer_solo_dev": "🤖 Built by a solo developer with AI superpowers",
+  "game_testnet_btn": "Try for Free 🎮",
+  "game_browser_notice": "💡 For the best experience, using Pi Browser is recommended!",
+  "game_guest_mode_info": "Regular Browser: Guest Mode (Limited) | Pi Browser: Full Features + Rewards"
 }
