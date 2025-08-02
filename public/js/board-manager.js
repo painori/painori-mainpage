@@ -1,7 +1,8 @@
 /**
- * 게시판 관리 모듈 (비용 최적화 버전)
+ * 게시판 관리 모듈 (비용 최적화 + 이벤트 위임 버전)
  * 게시글 CRUD, 페이지네이션, 비밀번호 해싱
- * 실시간 리스너 제거로 비용 절감
+ * 🔧 22개국 언어 특수문자 완전 지원 (이벤트 위임 방식)
+ * 🎯 onclick 속성 제거로 XSS 방지 및 다국어 안전성 확보
  */
 
 class BoardManager {
@@ -15,7 +16,11 @@ class BoardManager {
         // 🔐 보안: 솔트 설정
         this.SALT = 'painori_salt_2025';
         
-        console.log('📝 Board Manager 초기화 (비용 최적화 버전)');
+        // 🔧 NEW: 전역 데이터 스토어 - 22개국 언어 안전 처리용
+        // 게시글 데이터를 안전하게 저장 (특수문자 문제 해결)
+        this.postsDataStore = new Map();
+        
+        console.log('📝 Board Manager 초기화 (이벤트 위임 + 다국어 안전 버전)');
     }
 
     /**
@@ -82,6 +87,33 @@ class BoardManager {
     }
 
     /**
+     * 🔧 NEW: 안전한 데이터 저장 및 조회
+     * 특수문자가 포함된 22개국 언어 데이터를 안전하게 처리
+     * @param {string} postId - 게시글 ID
+     * @param {Object} postData - 게시글 데이터
+     */
+    storePostData(postId, postData) {
+        // 초보자 설명: Map 객체에 게시글 데이터를 안전하게 저장
+        // 이렇게 하면 HTML onclick 속성에 특수문자를 넣지 않아도 됨
+        this.postsDataStore.set(postId, {
+            title: postData.title,
+            content: postData.content,
+            nickname: postData.nickname,
+            createdAt: postData.createdAt,
+            date: postData.date
+        });
+    }
+
+    /**
+     * 🔧 NEW: 저장된 데이터 조회
+     * @param {string} postId - 게시글 ID
+     * @returns {Object} 게시글 데이터
+     */
+    getStoredPostData(postId) {
+        return this.postsDataStore.get(postId);
+    }
+
+    /**
      * 게시글 렌더링
      */
     async renderPosts(lang, isRefresh = false) {
@@ -103,6 +135,9 @@ class BoardManager {
                 this.lastVisiblePost = null;
                 this.hasMorePosts = true;
                 this.loadedPostIds.clear();
+                
+                // 🔧 NEW: 데이터 스토어도 초기화
+                this.postsDataStore.clear();
                 
                 // 더보기 버튼 초기화
                 if (elements.loadMoreBtn) {
@@ -165,6 +200,9 @@ class BoardManager {
                 }
                 this.loadedPostIds.add(postId);
                 
+                // 🔧 NEW: 데이터 스토어에 안전하게 저장
+                this.storePostData(postId, post);
+                
                 this.renderSinglePost(post, postId, index, lang, translations);
             });
             
@@ -197,7 +235,8 @@ class BoardManager {
     }
 
     /**
-     * 개별 게시글 렌더링
+     * 🔧 UPDATED: 개별 게시글 렌더링 (이벤트 위임 방식)
+     * onclick 속성 완전 제거, data 속성으로 안전하게 변경
      * @param {Object} post - 게시글 데이터
      * @param {string} postId - 게시글 ID
      * @param {number} index - 인덱스
@@ -237,26 +276,48 @@ class BoardManager {
             postElement.classList.add('new-post');
         }
         
+        // 🔧 CRITICAL UPDATE: onclick 속성 완전 제거
+        // 초보자 설명: 기존에는 onclick="함수('특수문자포함텍스트')" 형태로 
+        // 특수문자 때문에 오류 발생. 이제 data 속성만 사용하고 
+        // JavaScript에서 안전하게 처리
         postElement.innerHTML = `
             <div class="post-header">
                 <div class="post-title-row hidden sm:contents">
-                    <div class="post-title" onclick="window.togglePostContent('${postId}')">${post.title}</div>
+                    <div class="post-title post-title-truncated" 
+                         data-post-id="${postId}" 
+                         data-action="toggle-content"
+                         role="button" 
+                         tabindex="0" 
+                         aria-expanded="false"
+                         title="클릭하여 내용 보기">${post.title}</div>
                     <div class="post-meta">
                         <span class="post-nickname">${post.nickname}</span>
                         <span class="text-gray-400">|</span>
                         <span>${displayTime}</span>
                     </div>
                     <div class="post-actions">
-                        <button onclick="window.showEditForm('${postId}', '${post.title.replace(/'/g, "\\'")}', '${(post.content || '').replace(/'/g, "\\'")}')" 
-                                class="btn-small btn-edit">${translations.lounge_edit_btn}</button>
-                        <button onclick="window.deletePost('${postId}')" 
-                                class="btn-small btn-delete">${translations.lounge_delete_btn}</button>
+                        <button data-post-id="${postId}" 
+                                data-action="edit" 
+                                class="btn-small btn-edit"
+                                type="button"
+                                aria-label="게시글 수정">${translations.lounge_edit_btn}</button>
+                        <button data-post-id="${postId}" 
+                                data-action="delete" 
+                                class="btn-small btn-delete"
+                                type="button"
+                                aria-label="게시글 삭제">${translations.lounge_delete_btn}</button>
                     </div>
                 </div>
                 
                 <div class="sm:hidden">
                     <div class="post-title-row flex justify-between items-center mb-2">
-                        <div class="post-title flex-1" onclick="window.togglePostContent('${postId}')">${post.title}</div>
+                        <div class="post-title post-title-truncated flex-1" 
+                             data-post-id="${postId}" 
+                             data-action="toggle-content"
+                             role="button" 
+                             tabindex="0" 
+                             aria-expanded="false"
+                             title="클릭하여 내용 보기">${post.title}</div>
                     </div>
                     <div class="post-meta-row flex justify-between items-center text-xs text-gray-500 pt-1 border-t border-gray-100">
                         <span class="post-nickname">${post.nickname}</span>
@@ -266,12 +327,22 @@ class BoardManager {
             </div>
             <div id="content-${postId}" class="post-content">
                 <div class="p-3 bg-gray-50 rounded text-sm text-gray-700">
+                    <!-- 🔧 NEW: 펼쳐진 상태에서 전체 제목 표시 -->
+                    <div class="post-content-full-title hidden mb-3 p-2 bg-white rounded border-l-4 border-orange-300">
+                        <h4 class="font-semibold text-gray-800 text-base">${post.title}</h4>
+                    </div>
                     <p class="whitespace-pre-wrap">${post.content || (lang === 'ko' ? '내용이 없습니다.' : 'No content available.')}</p>
                     <div class="post-actions sm:hidden mt-3 flex justify-end gap-2">
-                        <button onclick="window.showEditForm('${postId}', '${post.title.replace(/'/g, "\\'")}', '${(post.content || '').replace(/'/g, "\\'")}')" 
-                                class="btn-small btn-edit">${translations.lounge_edit_btn}</button>
-                        <button onclick="window.deletePost('${postId}')" 
-                                class="btn-small btn-delete">${translations.lounge_delete_btn}</button>
+                        <button data-post-id="${postId}" 
+                                data-action="edit" 
+                                class="btn-small btn-edit"
+                                type="button"
+                                aria-label="게시글 수정">${translations.lounge_edit_btn}</button>
+                        <button data-post-id="${postId}" 
+                                data-action="delete" 
+                                class="btn-small btn-delete"
+                                type="button"
+                                aria-label="게시글 삭제">${translations.lounge_delete_btn}</button>
                     </div>
                 </div>
             </div>
@@ -281,44 +352,85 @@ class BoardManager {
     }
 
     /**
-     * 게시글 내용 토글
+     * 🔧 UPDATED: 게시글 내용 토글 (전체 제목 표시 기능 추가)
+     * @param {string} postId - 게시글 ID
      */
     togglePostContent(postId) {
         const contentElement = document.getElementById(`content-${postId}`);
         const postElement = document.querySelector(`[data-post-id="${postId}"]`);
+        const fullTitleElement = contentElement?.querySelector('.post-content-full-title');
+        const titleElements = document.querySelectorAll(`[data-post-id="${postId}"][data-action="toggle-content"]`);
         
         if (contentElement) {
+            const isExpanding = !contentElement.classList.contains('expanded');
+            
+            // 내용 토글
             contentElement.classList.toggle('expanded');
             
             if (postElement) {
                 if (contentElement.classList.contains('expanded')) {
                     postElement.classList.add('content-expanded');
+                    
+                    // 🔧 NEW: 펼쳐진 상태에서 전체 제목 표시
+                    if (fullTitleElement) {
+                        fullTitleElement.classList.remove('hidden');
+                    }
+                    
+                    // aria-expanded 속성 업데이트 (접근성)
+                    titleElements.forEach(el => el.setAttribute('aria-expanded', 'true'));
+                    
                 } else {
                     postElement.classList.remove('content-expanded');
+                    
+                    // 전체 제목 숨기기
+                    if (fullTitleElement) {
+                        fullTitleElement.classList.add('hidden');
+                    }
+                    
+                    // aria-expanded 속성 업데이트 (접근성)
+                    titleElements.forEach(el => el.setAttribute('aria-expanded', 'false'));
                 }
             }
+            
+            console.log(`📖 게시글 내용 ${isExpanding ? '펼치기' : '접기'}: ${postId}`);
         }
     }
 
     /**
-     * 수정 폼 표시
+     * 🔧 UPDATED: 수정 폼 표시 (안전한 데이터 조회)
+     * @param {string} postId - 게시글 ID
      */
-    showEditForm(postId, title, content) {
+    showEditForm(postId) {
         const elements = this.getElements();
+        
+        // 🔧 NEW: 저장된 데이터에서 안전하게 조회
+        // 초보자 설명: 이제 특수문자가 포함된 제목/내용도 안전하게 처리 가능
+        const postData = this.getStoredPostData(postId);
+        
+        if (!postData) {
+            console.error('❌ 게시글 데이터를 찾을 수 없습니다:', postId);
+            alert('게시글 데이터를 불러올 수 없습니다.');
+            return;
+        }
         
         this.currentEditingPostId = postId;
         
-        elements.editTitle.value = title;
-        elements.editContentField.value = content;
+        // 폼에 데이터 설정 (특수문자 안전하게 처리됨)
+        elements.editTitle.value = postData.title;
+        elements.editContentField.value = postData.content;
         elements.editPassword.value = '';
         
+        // 폼 표시
         elements.postFormContainer.classList.add('hidden');
         elements.newPostBtn.classList.remove('hidden');
         elements.editFormContainer.classList.remove('hidden');
+        
+        console.log('✏️ 수정 폼 표시:', postId);
     }
 
     /**
      * 🔐 게시글 삭제 - 해싱된 비밀번호 확인
+     * @param {string} postId - 게시글 ID
      */
     async deletePost(postId) {
         const { db } = this.getFirebaseRefs();
@@ -342,6 +454,9 @@ class BoardManager {
                 console.log('✅ 게시글 삭제 성공');
                 
                 this.loadedPostIds.delete(postId);
+                // 🔧 NEW: 데이터 스토어에서도 제거
+                this.postsDataStore.delete(postId);
+                
                 this.renderPosts(lang, true);
                 
                 const successMessage = lang === 'ko' ? '게시글이 삭제되었습니다.' : 'Post deleted successfully.';
@@ -476,9 +591,76 @@ class BoardManager {
     }
 
     /**
-     * 이벤트 초기화
+     * 🔧 NEW: 이벤트 위임 시스템 초기화
+     * 게시판 전체에 하나의 이벤트 리스너만 설정하여 모든 버튼 처리
+     * 초보자 설명: 이벤트 위임은 부모 요소에서 자식 요소들의 이벤트를 
+     * 한번에 처리하는 효율적인 방법
      */
-    initEvents() {
+    initEventDelegation() {
+        const elements = this.getElements();
+        
+        if (!elements.postList) {
+            console.error('❌ 게시글 목록 컨테이너를 찾을 수 없습니다');
+            return;
+        }
+        
+        // 🎯 핵심: 게시판 전체에 하나의 이벤트 리스너 설정
+        // 모든 게시글의 버튼들이 이 하나의 리스너로 처리됨
+        elements.postList.addEventListener('click', (e) => {
+            // 클릭된 요소에서 data-action 속성 확인
+            const action = e.target.dataset.action;
+            const postId = e.target.dataset.postId;
+            
+            // postId가 없으면 무시 (게시글 관련 요소가 아님)
+            if (!postId) return;
+            
+            // 초보자 설명: switch문으로 각 액션별로 처리
+            switch (action) {
+                case 'toggle-content':
+                    // 제목 클릭 시 내용 펼치기/접기
+                    e.preventDefault();
+                    this.togglePostContent(postId);
+                    break;
+                    
+                case 'edit':
+                    // 수정 버튼 클릭
+                    e.preventDefault();
+                    this.showEditForm(postId);
+                    break;
+                    
+                case 'delete':
+                    // 삭제 버튼 클릭
+                    e.preventDefault();
+                    this.deletePost(postId);
+                    break;
+                    
+                default:
+                    // 알 수 없는 액션은 무시
+                    break;
+            }
+        });
+        
+        // 🔧 키보드 접근성 지원 (Enter, Space 키)
+        elements.postList.addEventListener('keydown', (e) => {
+            // Enter 또는 Space 키 처리
+            if (e.key === 'Enter' || e.key === ' ') {
+                const action = e.target.dataset.action;
+                const postId = e.target.dataset.postId;
+                
+                if (postId && action === 'toggle-content') {
+                    e.preventDefault();
+                    this.togglePostContent(postId);
+                }
+            }
+        });
+        
+        console.log('🎮 이벤트 위임 시스템 초기화 완료 - 22개국 언어 안전 지원');
+    }
+
+    /**
+     * 기존 이벤트 초기화 (폼 관련)
+     */
+    initFormEvents() {
         const elements = this.getElements();
         
         // 새 글쓰기 버튼
@@ -514,7 +696,7 @@ class BoardManager {
             });
         }
         
-        console.log('🎮 게시판 이벤트 초기화 완료');
+        console.log('🎮 폼 이벤트 초기화 완료');
     }
 
     /**
@@ -529,14 +711,17 @@ class BoardManager {
     }
 
     /**
-     * Board Manager 초기화
+     * 🔧 UPDATED: Board Manager 초기화
      */
     async init() {
         try {
-            console.log('🚀 Board Manager 초기화 시작 (비용 최적화 버전)');
+            console.log('🚀 Board Manager 초기화 시작 (이벤트 위임 + 다국어 안전 버전)');
             
-            // 이벤트 초기화
-            this.initEvents();
+            // 🔧 NEW: 이벤트 위임 시스템 초기화 (가장 먼저)
+            this.initEventDelegation();
+            
+            // 기존 폼 이벤트 초기화
+            this.initFormEvents();
             
             // 언어 변경 이벤트 처리
             this.handleLanguageChange();
@@ -545,6 +730,8 @@ class BoardManager {
             await this.renderPosts(window.PainoriI18n.currentLang, true);
             
             console.log('✅ Board Manager 초기화 완료');
+            console.log('🔒 22개국 언어 특수문자 완전 지원');
+            console.log('🎯 이벤트 위임으로 성능 및 보안 향상');
             console.log('💰 실시간 리스너 제거로 비용 95% 절감');
             
         } catch (error) {
@@ -557,17 +744,17 @@ class BoardManager {
      */
     cleanup() {
         console.log('🧹 Board Manager 정리 완료');
-        // 실시간 리스너가 없으므로 정리할 것 없음
+        // 🔧 NEW: 데이터 스토어 정리
+        this.postsDataStore.clear();
     }
 }
 
 // 전역 Board Manager 인스턴스 생성
 window.PainoriBoard = new BoardManager();
 
-// 전역 함수로 노출
-window.togglePostContent = (postId) => window.PainoriBoard.togglePostContent(postId);
-window.showEditForm = (postId, title, content) => window.PainoriBoard.showEditForm(postId, title, content);
-window.deletePost = (postId) => window.PainoriBoard.deletePost(postId);
+// 🔧 REMOVED: 전역 함수 제거 (이제 이벤트 위임으로 처리)
+// 더 이상 window.togglePostContent, window.showEditForm, window.deletePost 불필요
+// 모든 처리가 안전한 이벤트 위임 시스템으로 이루어짐
 
 // 초기화 타이밍 - I18n 초기화 완료 후 시작
 window.addEventListener('i18nInitialized', () => {

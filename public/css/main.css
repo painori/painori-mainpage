@@ -1,6 +1,7 @@
 /* 
  * Painori 메인 스타일시트
  * 기본 레이아웃, 컴포넌트, 색상 시스템
+ * 🔧 이벤트 위임 + 제목 전체 표시 + 접근성 개선
  */
 
 /* ===== 기본 설정 ===== */
@@ -66,6 +67,15 @@ body {
     font-size: 0.75rem;
     border-radius: 0.25rem;
     font-weight: 500;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    /* 🔧 NEW: 접근성 개선 - 최소 터치 영역 확보 */
+    min-height: 32px;
+    min-width: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .btn-edit {
@@ -77,6 +87,12 @@ body {
     background-color: #2563eb;
 }
 
+/* 🔧 NEW: 포커스 상태 개선 (키보드 네비게이션) */
+.btn-edit:focus {
+    outline: 2px solid #93c5fd;
+    outline-offset: 2px;
+}
+
 .btn-delete {
     background-color: #ef4444;
     color: white;
@@ -84,6 +100,12 @@ body {
 
 .btn-delete:hover {
     background-color: #dc2626;
+}
+
+/* 🔧 NEW: 포커스 상태 개선 (키보드 네비게이션) */
+.btn-delete:focus {
+    outline: 2px solid #fca5a5;
+    outline-offset: 2px;
 }
 
 /* 더보기 버튼 */
@@ -332,7 +354,7 @@ body {
     font-weight: 500;
 }
 
-/* ===== 게시글 관련 스타일 ===== */
+/* ===== 🔧 UPDATED: 게시글 관련 스타일 (이벤트 위임 + 제목 전체 표시) ===== */
 .post-item {
     cursor: pointer;
     transition: all 0.2s;
@@ -360,15 +382,83 @@ body {
     width: 100%;
 }
 
+/* 🔧 UPDATED: 제목 스타일 개선 */
 .post-title {
     font-weight: bold;
     color: #1f2937;
     flex: 1;
     cursor: pointer;
+    transition: all 0.2s ease;
+    max-width: 300px;
+    /* 🔧 NEW: 키보드 접근성 지원 */
+    border-radius: 0.25rem;
+    padding: 0.25rem;
+    margin: -0.25rem;
+}
+
+/* 🔧 NEW: 축약된 제목 스타일 */
+.post-title-truncated {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    max-width: 300px;
+}
+
+/* 🔧 NEW: 제목 hover 및 focus 효과 */
+.post-title:hover {
+    color: #f97316;
+    background-color: #fef7ed;
+}
+
+.post-title:focus {
+    outline: 2px solid #f97316;
+    outline-offset: 2px;
+    color: #f97316;
+    background-color: #fef7ed;
+}
+
+/* 🔧 NEW: 내용이 펼쳐진 상태에서 제목 색상 변경 */
+.post-item.content-expanded .post-title {
+    color: #ea580c;
+    font-weight: 600;
+}
+
+/* 🔧 NEW: 펼쳐진 상태에서 전체 제목 표시 스타일 */
+.post-content-full-title {
+    background-color: white;
+    border-left: 4px solid #f97316;
+    border-radius: 0.375rem;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.post-content-full-title h4 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1f2937;
+    line-height: 1.4;
+    /* 🔧 긴 제목도 완전히 표시 */
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+}
+
+/* 🔧 NEW: 전체 제목이 보일 때 애니메이션 효과 */
+.post-content.expanded .post-content-full-title:not(.hidden) {
+    animation: slideInFromTop 0.3s ease-out;
+}
+
+@keyframes slideInFromTop {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .post-meta {
@@ -401,6 +491,7 @@ body {
     border-top: 1px solid #e5e7eb;
 }
 
+/* 🔧 UPDATED: 액션 버튼 표시 개선 */
 .post-actions {
     opacity: 0;
     transition: opacity 0.2s;
@@ -410,6 +501,16 @@ body {
 }
 
 .post-item:hover .post-actions {
+    opacity: 1;
+}
+
+/* 🔧 NEW: 내용이 펼쳐진 상태에서는 항상 버튼 표시 */
+.post-item.content-expanded .post-actions {
+    opacity: 1;
+}
+
+/* 🔧 NEW: 키보드 네비게이션 강화 */
+.post-item:focus-within .post-actions {
     opacity: 1;
 }
 
@@ -459,6 +560,7 @@ body {
 .philosophy-nori .philosophy-icon:hover {
     background-color: #86efac;
 }
+
 /* ===== 언어 드롭다운 스타일 ===== */
 .language-dropdown {
     position: relative;
@@ -527,56 +629,64 @@ body {
 .search-container input:focus {
     box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
 }
-/* ===== 언어 드롭다운 스타일 개선 ===== */
-.language-dropdown {
-    position: relative;
+
+/* ===== 🔧 NEW: 접근성 개선 ===== */
+
+/* 키보드 네비게이션 모드일 때 포커스 강화 */
+body.keyboard-navigation *:focus {
+    outline: 3px solid #f97316 !important;
+    outline-offset: 2px !important;
 }
 
-.language-dropdown-btn {
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
-    padding: 0.5rem;
-    border-radius: 0.375rem;
-    transition: all 0.2s;
-    cursor: pointer;
-    border: none;
-    background: none;
-    color: #6b7280;
-}
-
-.language-dropdown-btn:hover {
-    background-color: #f9fafb;
-    color: #f97316;
-}
-
-.language-dropdown-menu {
+/* 스크린 리더 전용 텍스트 */
+.sr-only {
     position: absolute;
-    right: 0;
-    margin-top: 0.5rem;
-    width: 12rem;
-    background-color: white;
-    border-radius: 0.5rem;
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-    border: 1px solid #e5e7eb;
-    padding: 0.5rem 0;
-    z-index: 50;
-    max-height: 16rem;
-    overflow-y: auto;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
 }
 
-.language-option {
-    width: 100%;
-    text-align: left;
-    padding: 0.5rem 1rem;
-    transition: background-color 0.2s;
-    border: none;
-    background: none;
-    cursor: pointer;
-    font-size: 0.875rem;
+/* 포커스 시 스크린 리더 텍스트 표시 */
+.sr-only:focus {
+    position: static;
+    width: auto;
+    height: auto;
+    padding: 0.5rem;
+    margin: 0;
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
 }
 
-.language-option:hover {
-    background-color: #f97316;
-    color: white;
+/* 🔧 NEW: 고대비 모드 지원 */
+@media (prefers-contrast: high) {
+    .post-title:hover,
+    .post-title:focus {
+        background-color: #000000;
+        color: #ffffff;
+    }
+    
+    .btn-edit:focus,
+    .btn-delete:focus {
+        outline: 3px solid #000000;
+    }
+}
+
+/* 🔧 NEW: 애니메이션 줄이기 모드 지원 */
+@media (prefers-reduced-motion: reduce) {
+    .post-item,
+    .post-title,
+    .post-content,
+    .post-content-full-title {
+        transition: none;
+    }
+    
+    .post-content-full-title:not(.hidden) {
+        animation: none;
+    }
 }
