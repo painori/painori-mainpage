@@ -1,8 +1,9 @@
 /**
- * 게시판 관리 모듈 (비용 최적화 + 이벤트 위임 버전)
+ * 게시판 관리 모듈 (서버사이드 닉네임 검증 버전)
  * 게시글 CRUD, 페이지네이션, 비밀번호 해싱
  * 🔧 22개국 언어 특수문자 완전 지원 (이벤트 위임 방식)
  * 🎯 onclick 속성 제거로 XSS 방지 및 다국어 안전성 확보
+ * 🔒 lukep81 닉네임 서버사이드 보호 (절대 확인 불가능)
  */
 
 class BoardManager {
@@ -20,7 +21,10 @@ class BoardManager {
         // 게시글 데이터를 안전하게 저장 (특수문자 문제 해결)
         this.postsDataStore = new Map();
         
-        console.log('📝 Board Manager 초기화 (이벤트 위임 + 다국어 안전 버전)');
+        // 🔒 REMOVED: 클라이언트사이드 보호 설정 완전 제거
+        // 이제 모든 검증은 서버에서만 수행됨 (절대 확인 불가능)
+        
+        console.log('📝 Board Manager 초기화 (서버사이드 닉네임 검증 + 이벤트 위임 + 다국어 안전 버전)');
     }
 
     /**
@@ -32,7 +36,8 @@ class BoardManager {
         }
         return {
             db: window.PainoriFirebase.db,
-            firestore: window.PainoriFirebase.firestore
+            firestore: window.PainoriFirebase.firestore,
+            functions: window.PainoriFirebase.functions
         };
     }
 
@@ -52,6 +57,76 @@ class BoardManager {
             console.error('❌ 비밀번호 해싱 실패:', error);
             // 폴백: 기본 해싱
             return btoa(password + this.SALT);
+        }
+    }
+
+    /**
+     * 🔒 NEW: 서버사이드 닉네임 검증 (절대 확인 불가능)
+     * @param {string} nickname - 입력된 닉네임
+     * @returns {Object} {isValid: boolean, processedNickname: string, errorMessage: string, isAdmin: boolean}
+     */
+    async validateNickname(nickname) {
+        const lang = window.PainoriI18n.currentLang;
+        
+        try {
+            const { functions } = this.getFirebaseRefs();
+            
+            // 🔒 서버사이드 검증 함수 호출 (보안 코드는 서버에서만 존재)
+            const validateNicknameFunction = functions.httpsCallable('validateNickname');
+            
+            console.log('🔒 서버로 닉네임 검증 요청 전송');
+            const result = await validateNicknameFunction({ nickname });
+            
+            if (!result.data.success) {
+                throw new Error(result.data.error || 'Server validation failed');
+            }
+            
+            const { isValid, processedNickname, error, isAdmin } = result.data;
+            
+            if (!isValid) {
+                // 서버에서 차단된 닉네임
+                console.log('🚫 서버에서 닉네임 차단됨');
+                
+                const errorMessage = lang === 'ko' ? 
+                    '이 닉네임은 사용할 수 없습니다. 다른 닉네임을 선택해주세요.' :
+                    'This nickname is not available. Please choose a different nickname.';
+                
+                return {
+                    isValid: false,
+                    processedNickname: null,
+                    errorMessage: errorMessage,
+                    isAdmin: false
+                };
+            }
+            
+            // 검증 통과
+            if (isAdmin) {
+                console.log('✅ 관리자 인증 성공 (서버 검증)');
+            } else {
+                console.log('✅ 일반 닉네임 사용 허용 (서버 검증)');
+            }
+            
+            return {
+                isValid: true,
+                processedNickname: processedNickname,
+                errorMessage: null,
+                isAdmin: isAdmin || false
+            };
+            
+        } catch (error) {
+            console.error('❌ 서버사이드 닉네임 검증 실패:', error);
+            
+            // 서버 에러 시 안전한 폴백
+            const errorMessage = lang === 'ko' ? 
+                '닉네임 검증 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.' :
+                'An error occurred during nickname validation. Please try again later.';
+            
+            return {
+                isValid: false,
+                processedNickname: null,
+                errorMessage: errorMessage,
+                isAdmin: false
+            };
         }
     }
 
@@ -473,7 +548,7 @@ class BoardManager {
     }
 
     /**
-     * 🔐 새 게시글 작성 - 비밀번호 해싱 적용
+     * 🔐 UPDATED: 새 게시글 작성 (서버사이드 닉네임 검증)
      */
     async submitPost() {
         const elements = this.getElements();
@@ -484,18 +559,36 @@ class BoardManager {
         const title = elements.postTitle.value.trim();
         const content = elements.postContent.value.trim();
 
+        // 기본 필드 검증
         if (!nickname || !password || !title || !content) {
             alert('Please fill in all fields. / 모든 항목을 입력해주세요.');
             return;
         }
         
+        // 🔒 NEW: 서버사이드 닉네임 검증 (절대 확인 불가능)
+        console.log('🔒 서버사이드 닉네임 검증 시작');
+        const nicknameValidation = await this.validateNickname(nickname);
+        
+        if (!nicknameValidation.isValid) {
+            // 서버에서 차단된 닉네임
+            alert(nicknameValidation.errorMessage);
+            elements.postNickname.focus(); // 닉네임 필드에 포커스
+            return;
+        }
+        
+        // 서버 검증 통과한 닉네임 사용
+        const validatedNickname = nicknameValidation.processedNickname;
+        
         console.log('📝 새 게시글 작성 시작');
+        if (nicknameValidation.isAdmin) {
+            console.log('👑 관리자 계정으로 게시글 작성');
+        }
         
         try {
             const hashedPassword = await this.hashPassword(password);
             
             const newPost = {
-                nickname,
+                nickname: validatedNickname, // 🔒 서버 검증된 닉네임 사용
                 password: hashedPassword,
                 title,
                 content,
@@ -715,7 +808,7 @@ class BoardManager {
      */
     async init() {
         try {
-            console.log('🚀 Board Manager 초기화 시작 (이벤트 위임 + 다국어 안전 버전)');
+            console.log('🚀 Board Manager 초기화 시작 (서버사이드 닉네임 검증 버전)');
             
             // 🔧 NEW: 이벤트 위임 시스템 초기화 (가장 먼저)
             this.initEventDelegation();
@@ -730,6 +823,7 @@ class BoardManager {
             await this.renderPosts(window.PainoriI18n.currentLang, true);
             
             console.log('✅ Board Manager 초기화 완료');
+            console.log('🔒 서버사이드 닉네임 보호 (절대 확인 불가능)');
             console.log('🔒 22개국 언어 특수문자 완전 지원');
             console.log('🎯 이벤트 위임으로 성능 및 보안 향상');
             console.log('💰 실시간 리스너 제거로 비용 95% 절감');
