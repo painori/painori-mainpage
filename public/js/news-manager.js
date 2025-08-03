@@ -2,7 +2,10 @@
  * 뉴스 관리 모듈 (비용 최적화 버전)
  * Pi 블로그, 크립토 뉴스 로딩 및 렌더링
  * Functions 호출 최소화로 비용 절감
+ * 🔧 localStorage 기반 DEBUG_MODE 적용
  */
+
+// 🔧 디버그 모드 설정 (localStorage 기반)
 
 class NewsManager {
     constructor() {
@@ -19,7 +22,7 @@ class NewsManager {
             EMERGENCY_CACHE: 30 * 60 * 1000 // 30분 (5분 → 30분)
         };
         
-        console.log('📰 News Manager 초기화 (비용 최적화 버전)');
+        if (window.isDebugMode()) console.log('📰 News Manager 초기화 (비용 최적화 버전)');
     }
 
     /**
@@ -48,11 +51,11 @@ class NewsManager {
      */
     async fetchPiNews() {
         try {
-            console.log('🥧 Pi Network 뉴스 요청 시작 (1시간 캐싱)');
+            if (window.isDebugMode()) console.log('🥧 Pi Network 뉴스 요청 시작 (1시간 캐싱)');
             
             // 🔧 최적화: 1시간 캐시 확인
             if (this.isCacheValid(this.newsCache.pi, this.cacheSettings.PI_NEWS)) {
-                console.log('💾 Pi 뉴스 캐시 사용 (1시간 유효)');
+                if (window.isDebugMode()) console.log('💾 Pi 뉴스 캐시 사용 (1시간 유효)');
                 return this.newsCache.pi.data;
             }
             
@@ -60,7 +63,7 @@ class NewsManager {
             const getPiNews = functions.httpsCallable('getPiNews');
             const result = await getPiNews();
             
-            console.log('📡 Pi News 응답:', result);
+            if (window.isDebugMode()) console.log('📡 Pi News 응답:', result);
             
             if (result && result.data && result.data.data && Array.isArray(result.data.data)) {
                 const newsData = result.data.data;
@@ -71,7 +74,7 @@ class NewsManager {
                     timestamp: Date.now()
                 };
                 
-                console.log(`✅ Pi 뉴스 로딩 성공: ${newsData.length}개 (1시간 캐싱)`);
+                if (window.isDebugMode()) console.log(`✅ Pi 뉴스 로딩 성공: ${newsData.length}개 (1시간 캐싱)`);
                 return newsData;
             } else {
                 throw new Error('Invalid Pi News response format');
@@ -82,7 +85,7 @@ class NewsManager {
             
             // 응급 캐시 확인 (30분)
             if (this.newsCache.pi.data) {
-                console.log('🚑 응급 캐시 사용 (30분)');
+                if (window.isDebugMode()) console.log('🚑 응급 캐시 사용 (30분)');
                 return this.newsCache.pi.data;
             }
             
@@ -96,11 +99,11 @@ class NewsManager {
      */
     async fetchCryptoNews() {
         try {
-            console.log('💰 Crypto News 요청 시작');
+            if (window.isDebugMode()) console.log('💰 Crypto News 요청 시작');
             
             // 🔧 최적화: 1시간 캐시 확인
             if (this.isCacheValid(this.newsCache.crypto, this.cacheSettings.CRYPTO_NEWS)) {
-                console.log('💾 크립토 뉴스 캐시 사용 (1시간 유효)');
+                if (window.isDebugMode()) console.log('💾 크립토 뉴스 캐시 사용 (1시간 유효)');
                 return this.newsCache.crypto.data;
             }
             
@@ -108,7 +111,7 @@ class NewsManager {
             const getCryptoNews = functions.httpsCallable('getCryptoNews');
             const result = await getCryptoNews();
             
-            console.log('📡 Crypto News 응답:', result);
+            if (window.isDebugMode()) console.log('📡 Crypto News 응답:', result);
             
             if (result && result.data && result.data.data && Array.isArray(result.data.data)) {
                 const newsData = result.data.data;
@@ -119,7 +122,7 @@ class NewsManager {
                     timestamp: Date.now()
                 };
                 
-                console.log(`✅ 크립토 뉴스 로딩 성공: ${newsData.length}개 (1시간 캐싱)`);
+                if (window.isDebugMode()) console.log(`✅ 크립토 뉴스 로딩 성공: ${newsData.length}개 (1시간 캐싱)`);
                 return newsData;
             } else {
                 throw new Error('Invalid Crypto News response format');
@@ -130,7 +133,7 @@ class NewsManager {
             
             // 응급 캐시 확인 (30분)
             if (this.newsCache.crypto.data) {
-                console.log('🚑 응급 캐시 사용 (30분)');
+                if (window.isDebugMode()) console.log('🚑 응급 캐시 사용 (30분)');
                 return this.newsCache.crypto.data;
             }
             
@@ -193,7 +196,7 @@ class NewsManager {
      * @param {string} tabId - 전환할 탭 ID
      */
     switchTab(tabId) {
-        console.log(`📋 탭 전환: ${this.currentTab} → ${tabId}`);
+        if (window.isDebugMode()) console.log(`📋 탭 전환: ${this.currentTab} → ${tabId}`);
         
         this.currentTab = tabId;
         
@@ -255,7 +258,7 @@ class NewsManager {
         
         try {
             // Pi 뉴스 로딩
-            console.log('🔄 Pi 뉴스 로딩 시작');
+            if (window.isDebugMode()) console.log('🔄 Pi 뉴스 로딩 시작');
             const piNews = await this.fetchPiNews();
             
             // Pi 블로그 뉴스인지 확인
@@ -271,7 +274,7 @@ class NewsManager {
         
         try {
             // 크립토 뉴스 로딩
-            console.log('🔄 크립토 뉴스 로딩 시작');
+            if (window.isDebugMode()) console.log('🔄 크립토 뉴스 로딩 시작');
             const cryptoNews = await this.fetchCryptoNews();
             this.renderNews(cryptoNewsList, cryptoNews, lang, false);
             
@@ -293,7 +296,7 @@ class NewsManager {
             });
         });
         
-        console.log('📋 탭 이벤트 초기화 완료');
+        if (window.isDebugMode()) console.log('📋 탭 이벤트 초기화 완료');
     }
 
     /**
@@ -301,7 +304,7 @@ class NewsManager {
      */
     handleLanguageChange() {
         window.addEventListener('languageChanged', (event) => {
-            console.log('🌐 언어 변경 감지, 뉴스 다시 렌더링');
+            if (window.isDebugMode()) console.log('🌐 언어 변경 감지, 뉴스 다시 렌더링');
             this.loadAllNews();
         });
     }
@@ -311,7 +314,7 @@ class NewsManager {
      */
     async init() {
         try {
-            console.log('🚀 News Manager 초기화 시작 (비용 최적화 버전)');
+            if (window.isDebugMode()) console.log('🚀 News Manager 초기화 시작 (비용 최적화 버전)');
             
             // 탭 이벤트 초기화
             this.initTabEvents();
@@ -324,12 +327,11 @@ class NewsManager {
             
             // 🔧 최적화: 3시간마다 뉴스 자동 업데이트 (1시간 → 3시간)
             setInterval(() => {
-                console.log('⏰ 정기 뉴스 업데이트 (3시간마다)');
+                if (window.isDebugMode()) console.log('⏰ 정기 뉴스 업데이트 (3시간마다)');
                 this.loadAllNews();
             }, 10800000); // 3시간 (1시간에서 연장)
             
-            console.log('✅ News Manager 초기화 완료');
-            console.log('💰 Functions 호출 최소화로 비용 80% 절감');
+            if (window.isDebugMode()) console.log('✅ News Manager 초기화 완료');
             
         } catch (error) {
             console.error('❌ News Manager 초기화 실패:', error);
@@ -342,6 +344,6 @@ window.PainoriNews = new NewsManager();
 
 // I18n 초기화 완료 후 시작
 window.addEventListener('i18nInitialized', () => {
-    console.log('📰 I18n 완료 신호 받음, News Manager 시작');
+    if (window.isDebugMode()) console.log('📰 I18n 완료 신호 받음, News Manager 시작');
     window.PainoriNews.init();
 });

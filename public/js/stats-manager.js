@@ -2,13 +2,16 @@
  * 통계 관리 모듈 (통계 기능 제거 버전)
  * Google Analytics만 사용, Firebase 통계 완전 제거
  * DDoS 공격 대상 없음, 100% 비용 안전
+ * 🔧 localStorage 기반 DEBUG_MODE 적용
  */
+
+// 🔧 디버그 모드 설정 (localStorage 기반)
 
 class StatsManager {
     constructor() {
         this.isInitialized = false;
         
-        console.log('📊 Stats Manager 초기화 (통계 기능 완전 제거 - 100% 안전)');
+        if (window.isDebugMode()) console.log('📊 Stats Manager 초기화 (통계 기능 완전 제거 - 100% 안전)');
     }
 
     /**
@@ -16,7 +19,7 @@ class StatsManager {
      */
     checkGoogleAnalytics() {
         if (typeof gtag !== 'undefined') {
-            console.log('✅ Google Analytics 연결 확인됨');
+            if (window.isDebugMode()) console.log('✅ Google Analytics 연결 확인됨');
             
             // 페이지뷰 이벤트 (자동으로 전송되지만 확인용)
             gtag('event', 'page_view', {
@@ -39,7 +42,7 @@ class StatsManager {
         
         if (testnetBtn) {
             testnetBtn.addEventListener('click', async (e) => {
-                console.log('🧪 테스트넷 버튼 클릭 (Google Analytics 이벤트만)');
+                if (window.isDebugMode()) console.log('🧪 테스트넷 버튼 클릭 (Google Analytics 이벤트만)');
                 
                 // Google Analytics 이벤트만 전송 (Firebase 저장 없음)
                 if (typeof gtag !== 'undefined') {
@@ -48,7 +51,7 @@ class StatsManager {
                         'event_label': 'spot_nori_testnet',
                         'value': 1
                     });
-                    console.log('✅ Google Analytics 테스트넷 이벤트 전송 완료');
+                    if (window.isDebugMode()) console.log('✅ Google Analytics 테스트넷 이벤트 전송 완료');
                 }
                 
                 // 새창 열기 (팝업 차단 방지)
@@ -60,7 +63,7 @@ class StatsManager {
                 e.preventDefault();
             });
             
-            console.log('🎮 테스트넷 버튼 이벤트 초기화 완료 (Google Analytics 전용)');
+            if (window.isDebugMode()) console.log('🎮 테스트넷 버튼 이벤트 초기화 완료 (Google Analytics 전용)');
         } else {
             console.warn('⚠️ 테스트넷 버튼을 찾을 수 없음');
         }
@@ -78,7 +81,7 @@ class StatsManager {
             statisticsRemoved: true // 통계 기능 제거됨
         };
         
-        console.log('🛡️ 보안 상태 체크:', securityStatus);
+        if (window.isDebugMode()) console.log('🛡️ 보안 상태 체크:', securityStatus);
         
         return securityStatus;
     }
@@ -87,16 +90,18 @@ class StatsManager {
      * 통계 디버그 정보 출력 (단순화)
      */
     debugStats() {
-        console.log('🔍 통계 시스템 상태:', {
-            googleAnalytics: typeof gtag !== 'undefined',
-            firebaseStatistics: '완전 제거됨',
-            costRisk: '0% (공격 대상 없음)',
-            ddosProtection: '완벽 (기능 없음)',
-            monthlyEstimate: '$0 (통계 기능 없음)'
-        });
-        
-        // Google Analytics 상태 체크
-        this.checkGoogleAnalytics();
+        if (window.isDebugMode()) {
+            console.log('🔍 통계 시스템 상태:', {
+                googleAnalytics: typeof gtag !== 'undefined',
+                firebaseStatistics: '완전 제거됨',
+                costRisk: '0% (공격 대상 없음)',
+                ddosProtection: '완벽 (기능 없음)',
+                monthlyEstimate: '$0 (통계 기능 없음)'
+            });
+            
+            // Google Analytics 상태 체크
+            this.checkGoogleAnalytics();
+        }
     }
 
     /**
@@ -104,7 +109,7 @@ class StatsManager {
      */
     async init() {
         try {
-            console.log('🚀 Stats Manager 초기화 시작 (통계 기능 완전 제거)');
+            if (window.isDebugMode()) console.log('🚀 Stats Manager 초기화 시작 (통계 기능 완전 제거)');
             
             // Google Analytics 연결 확인
             this.checkGoogleAnalytics();
@@ -116,11 +121,7 @@ class StatsManager {
             this.initTestnetButtonEvent();
             
             this.isInitialized = true;
-            console.log('✅ Stats Manager 초기화 완료');
-            console.log('📊 통계 시스템: Google Analytics 전용');
-            console.log('🛡️ Firebase 통계: 완전 제거 (DDoS 안전)');
-            console.log('💰 예상 비용: $0/월 (통계 관련 비용 없음)');
-            console.log('🎯 보안 수준: 100% (공격 대상 없음)');
+            if (window.isDebugMode()) console.log('✅ Stats Manager 초기화 완료');
             
             // 디버그 정보 출력 (개발 시에만)
             if (window.location.hostname === 'localhost' || window.location.hostname.includes('127.0.0.1')) {
@@ -136,7 +137,7 @@ class StatsManager {
      * 정리 함수 (페이지 언로드 시)
      */
     cleanup() {
-        console.log('🧹 Stats Manager 정리 완료');
+        if (window.isDebugMode()) console.log('🧹 Stats Manager 정리 완료');
         // 통계 기능이 없으므로 정리할 것 없음
     }
 
@@ -164,7 +165,7 @@ window.PainoriStats.debugStats = () => window.PainoriStats.debugStats();
 
 // I18n 초기화 완료 후 시작
 window.addEventListener('i18nInitialized', () => {
-    console.log('📊 I18n 완료 신호 받음, Stats Manager 시작');
+    if (window.isDebugMode()) console.log('📊 I18n 완료 신호 받음, Stats Manager 시작');
     window.PainoriStats.init();
 });
 

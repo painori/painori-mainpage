@@ -5,7 +5,10 @@
  * 🎯 onclick 속성 제거로 XSS 방지 및 다국어 안전성 확보
  * 🔒 lukep81 닉네임 서버사이드 보호 (절대 확인 불가능)
  * 🌐 언어팩 시스템 적용 (닉네임 검증 에러 메시지)
+ * 🔧 localStorage 기반 DEBUG_MODE 적용
  */
+
+// 🔧 디버그 모드 설정 (localStorage 기반)
 
 class BoardManager {
     constructor() {
@@ -25,7 +28,7 @@ class BoardManager {
         // 🔒 REMOVED: 클라이언트사이드 보호 설정 완전 제거
         // 이제 모든 검증은 서버에서만 수행됨 (절대 확인 불가능)
         
-        console.log('📝 Board Manager 초기화 (서버사이드 닉네임 검증 + 이벤트 위임 + 다국어 안전 + 언어팩 시스템 버전)');
+        if (window.isDebugMode()) console.log('📝 Board Manager 초기화 (서버사이드 닉네임 검증 + 이벤트 위임 + 다국어 안전 + 언어팩 시스템 버전)');
     }
 
     /**
@@ -74,7 +77,7 @@ class BoardManager {
             // 🔒 서버사이드 검증 함수 호출 (보안 코드는 서버에서만 존재)
             const validateNicknameFunction = functions.httpsCallable('validateNickname');
             
-            console.log('🔒 서버로 닉네임 검증 요청 전송');
+            if (window.isDebugMode()) console.log('🔒 서버로 닉네임 검증 요청 전송');
             const result = await validateNicknameFunction({ nickname });
             
             if (!result.data.success) {
@@ -86,7 +89,7 @@ class BoardManager {
             if (!isValid) {
                 // 🌐 UPDATED: 언어팩 시스템 사용
                 // 서버에서 차단된 닉네임
-                console.log('🚫 서버에서 닉네임 차단됨');
+                if (window.isDebugMode()) console.log('🚫 서버에서 닉네임 차단됨');
                 
                 const errorMessage = window.PainoriI18n.t('nickname_not_available');
                 
@@ -100,9 +103,9 @@ class BoardManager {
             
             // 검증 통과
             if (isAdmin) {
-                console.log('✅ 관리자 인증 성공 (서버 검증)');
+                if (window.isDebugMode()) console.log('✅ 관리자 인증 성공 (서버 검증)');
             } else {
-                console.log('✅ 일반 닉네임 사용 허용 (서버 검증)');
+                if (window.isDebugMode()) console.log('✅ 일반 닉네임 사용 허용 (서버 검증)');
             }
             
             return {
@@ -223,7 +226,7 @@ class BoardManager {
                 elements.postsLoading.classList.remove('hidden');
             }
             
-            console.log('📄 게시글 목록 로딩 시작');
+            if (window.isDebugMode()) console.log('📄 게시글 목록 로딩 시작');
             
             // 10개씩 로드
             let query = db.collection("posts")
@@ -243,7 +246,7 @@ class BoardManager {
             
             // 첫 로딩에서 게시글이 없는 경우
             if (snapshot.empty && !this.lastVisiblePost) {
-                console.log('📄 게시글 없음');
+                if (window.isDebugMode()) console.log('📄 게시글 없음');
                 elements.postList.innerHTML = `<div class="text-center py-8 text-gray-500">${translations.lounge_no_posts}</div>`;
                 return;
             }
@@ -259,7 +262,7 @@ class BoardManager {
                 return;
             }
             
-            console.log(`📄 ${snapshot.size}개 게시글 발견`);
+            if (window.isDebugMode()) console.log(`📄 ${snapshot.size}개 게시글 발견`);
             
             // 마지막 문서 업데이트
             this.lastVisiblePost = snapshot.docs[snapshot.docs.length - 1];
@@ -292,7 +295,7 @@ class BoardManager {
                 elements.loadMoreBtn.classList.remove('hidden');
             }
             
-            console.log('✅ 게시글 렌더링 완료');
+            if (window.isDebugMode()) console.log('✅ 게시글 렌더링 완료');
             
         } catch (error) {
             console.error("❌ 게시글 로딩 에러:", error);
@@ -465,7 +468,7 @@ class BoardManager {
                 }
             }
             
-            console.log(`📖 게시글 내용 ${isExpanding ? '펼치기' : '접기'}: ${postId}`);
+            if (window.isDebugMode()) console.log(`📖 게시글 내용 ${isExpanding ? '펼치기' : '접기'}: ${postId}`);
         }
     }
 
@@ -498,7 +501,7 @@ class BoardManager {
         elements.newPostBtn.classList.remove('hidden');
         elements.editFormContainer.classList.remove('hidden');
         
-        console.log('✏️ 수정 폼 표시:', postId);
+        if (window.isDebugMode()) console.log('✏️ 수정 폼 표시:', postId);
     }
 
     /**
@@ -524,7 +527,7 @@ class BoardManager {
             
             if (doc.exists && doc.data().password === hashedPassword) {
                 await db.collection("posts").doc(postId).delete();
-                console.log('✅ 게시글 삭제 성공');
+                if (window.isDebugMode()) console.log('✅ 게시글 삭제 성공');
                 
                 this.loadedPostIds.delete(postId);
                 // 🔧 NEW: 데이터 스토어에서도 제거
@@ -564,7 +567,7 @@ class BoardManager {
         }
         
         // 🔒 NEW: 서버사이드 닉네임 검증 (절대 확인 불가능)
-        console.log('🔒 서버사이드 닉네임 검증 시작');
+        if (window.isDebugMode()) console.log('🔒 서버사이드 닉네임 검증 시작');
         const nicknameValidation = await this.validateNickname(nickname);
         
         if (!nicknameValidation.isValid) {
@@ -577,9 +580,9 @@ class BoardManager {
         // 서버 검증 통과한 닉네임 사용
         const validatedNickname = nicknameValidation.processedNickname;
         
-        console.log('📝 새 게시글 작성 시작');
+        if (window.isDebugMode()) console.log('📝 새 게시글 작성 시작');
         if (nicknameValidation.isAdmin) {
-            console.log('👑 관리자 계정으로 게시글 작성');
+            if (window.isDebugMode()) console.log('👑 관리자 계정으로 게시글 작성');
         }
         
         try {
@@ -596,7 +599,7 @@ class BoardManager {
             };
             
             await db.collection("posts").add(newPost);
-            console.log('✅ 게시글 저장 성공');
+            if (window.isDebugMode()) console.log('✅ 게시글 저장 성공');
             
             this.renderPosts(window.PainoriI18n.currentLang, true);
             elements.postFormContainer.classList.add('hidden');
@@ -638,7 +641,7 @@ class BoardManager {
                     updatedAt: firestore.FieldValue.serverTimestamp()
                 });
                 
-                console.log('✅ 게시글 수정 성공');
+                if (window.isDebugMode()) console.log('✅ 게시글 수정 성공');
                 this.renderPosts(window.PainoriI18n.currentLang, true);
                 elements.editFormContainer.classList.add('hidden');
                 this.currentEditingPostId = null;
@@ -745,7 +748,7 @@ class BoardManager {
             }
         });
         
-        console.log('🎮 이벤트 위임 시스템 초기화 완료 - 22개국 언어 안전 지원');
+        if (window.isDebugMode()) console.log('🎮 이벤트 위임 시스템 초기화 완료 - 22개국 언어 안전 지원');
     }
 
     /**
@@ -787,7 +790,7 @@ class BoardManager {
             });
         }
         
-        console.log('🎮 폼 이벤트 초기화 완료');
+        if (window.isDebugMode()) console.log('🎮 폼 이벤트 초기화 완료');
     }
 
     /**
@@ -796,7 +799,7 @@ class BoardManager {
     handleLanguageChange() {
         window.addEventListener('languageChanged', (event) => {
             const lang = event.detail.language;
-            console.log('🌐 언어 변경 감지, 게시판 다시 렌더링');
+            if (window.isDebugMode()) console.log('🌐 언어 변경 감지, 게시판 다시 렌더링');
             this.renderPosts(lang, true);
         });
     }
@@ -806,7 +809,7 @@ class BoardManager {
      */
     async init() {
         try {
-            console.log('🚀 Board Manager 초기화 시작 (서버사이드 닉네임 검증 + 언어팩 시스템 버전)');
+            if (window.isDebugMode()) console.log('🚀 Board Manager 초기화 시작 (서버사이드 닉네임 검증 + 언어팩 시스템 버전)');
             
             // 🔧 NEW: 이벤트 위임 시스템 초기화 (가장 먼저)
             this.initEventDelegation();
@@ -820,12 +823,7 @@ class BoardManager {
             // 게시글 로딩
             await this.renderPosts(window.PainoriI18n.currentLang, true);
             
-            console.log('✅ Board Manager 초기화 완료');
-            console.log('🔒 서버사이드 닉네임 보호 (절대 확인 불가능)');
-            console.log('🔒 22개국 언어 특수문자 완전 지원');
-            console.log('🎯 이벤트 위임으로 성능 및 보안 향상');
-            console.log('💰 실시간 리스너 제거로 비용 95% 절감');
-            console.log('🌐 언어팩 시스템으로 글로벌 서비스 대응');
+            if (window.isDebugMode()) console.log('✅ Board Manager 초기화 완료');
             
         } catch (error) {
             console.error('❌ Board Manager 초기화 실패:', error);
@@ -836,7 +834,7 @@ class BoardManager {
      * 정리 함수 (더 이상 리스너 정리 불필요)
      */
     cleanup() {
-        console.log('🧹 Board Manager 정리 완료');
+        if (window.isDebugMode()) console.log('🧹 Board Manager 정리 완료');
         // 🔧 NEW: 데이터 스토어 정리
         this.postsDataStore.clear();
     }
@@ -851,7 +849,7 @@ window.PainoriBoard = new BoardManager();
 
 // 초기화 타이밍 - I18n 초기화 완료 후 시작
 window.addEventListener('i18nInitialized', () => {
-    console.log('📝 I18n 완료 신호 받음, Board Manager 시작');
+    if (window.isDebugMode()) console.log('📝 I18n 완료 신호 받음, Board Manager 시작');
     window.PainoriBoard.init();
 });
 

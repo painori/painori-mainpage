@@ -1,7 +1,11 @@
 /**
  * Firebase 설정 및 초기화
  * Painori 프로젝트 Firebase 연결 관리
+ * 🔧 전역 디버그 유틸리티 함수 제공
  */
+
+// 🔧 전역 디버그 유틸리티 함수 (모든 모듈에서 사용)
+window.isDebugMode = () => localStorage.getItem('painori_debug') === 'true';
 
 // Firebase 설정 객체
 const firebaseConfig = {
@@ -15,15 +19,15 @@ const firebaseConfig = {
 };
 
 // Firebase 초기화
-console.log('🔥 Firebase 초기화 시작');
+if (window.isDebugMode()) console.log('🔥 Firebase 초기화 시작');
 const app = firebase.initializeApp(firebaseConfig);
-console.log('✅ Firebase 앱 초기화 완료');
+if (window.isDebugMode()) console.log('✅ Firebase 앱 초기화 완료');
 
 // Firebase 서비스 참조 생성
 const db = firebase.firestore();
 const functions = firebase.functions();
 
-console.log('✅ Firestore 및 Functions 참조 생성 완료');
+if (window.isDebugMode()) console.log('✅ Firestore 및 Functions 참조 생성 완료');
 
 // 전역 객체로 export (다른 모듈에서 사용)
 window.PainoriFirebase = {
@@ -33,4 +37,4 @@ window.PainoriFirebase = {
     firestore: firebase.firestore // Firestore 네임스페이스도 함께 export
 };
 
-console.log('🚀 Firebase 설정 완료 - 다른 모듈에서 window.PainoriFirebase로 접근 가능');
+if (window.isDebugMode()) console.log('🚀 Firebase 설정 완료 - 다른 모듈에서 window.PainoriFirebase로 접근 가능');

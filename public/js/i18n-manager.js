@@ -1,7 +1,10 @@
 /**
  * 다국어 관리 모듈
  * 동적 언어팩 로딩 및 번역 적용, 드롭다운 시스템
+ * 🔧 localStorage 기반 DEBUG_MODE 적용
  */
+
+// 🔧 디버그 모드 설정 (localStorage 기반)
 
 class I18nManager {
     constructor() {
@@ -40,7 +43,7 @@ class I18nManager {
             'af': { name: 'Afrikaans', nativeName: 'Afrikaans', flag: '🇿🇦' }
         };
         
-        console.log('🌐 I18n Manager 초기화');
+        if (window.isDebugMode()) console.log('🌐 I18n Manager 초기화');
     }
 
     /**
@@ -50,7 +53,7 @@ class I18nManager {
      */
     async loadLanguage(lang) {
         try {
-            console.log(`📥 언어팩 로딩 시작: ${lang}`);
+            if (window.isDebugMode()) console.log(`📥 언어팩 로딩 시작: ${lang}`);
             
             const response = await fetch(`/lang/${lang}.json`);
             if (!response.ok) {
@@ -60,7 +63,7 @@ class I18nManager {
             const translations = await response.json();
             this.translations[lang] = translations;
             
-            console.log(`✅ 언어팩 로딩 완료: ${lang} (${Object.keys(translations).length}개 키)`);
+            if (window.isDebugMode()) console.log(`✅ 언어팩 로딩 완료: ${lang} (${Object.keys(translations).length}개 키)`);
             return translations;
             
         } catch (error) {
@@ -68,7 +71,7 @@ class I18nManager {
             
             // 폴백 언어로 재시도
             if (lang !== this.fallbackLang) {
-                console.log(`🔄 폴백 언어로 재시도: ${this.fallbackLang}`);
+                if (window.isDebugMode()) console.log(`🔄 폴백 언어로 재시도: ${this.fallbackLang}`);
                 return await this.loadLanguage(this.fallbackLang);
             }
             
@@ -158,23 +161,23 @@ class I18nManager {
     initDropdownEvents() {
         // 🔧 DOM 로드 완료 후 실행
         const initWhenReady = () => {
-            console.log('🔧 드롭다운 이벤트 초기화 시작');
+            if (window.isDebugMode()) console.log('🔧 드롭다운 이벤트 초기화 시작');
             
             // 데스크톱 드롭다운
             const desktopBtn = document.getElementById('language-dropdown-btn');
             const desktopMenu = document.getElementById('language-dropdown-menu');
             
             if (desktopBtn && desktopMenu) {
-                console.log('✅ 데스크톱 드롭다운 요소 발견');
+                if (window.isDebugMode()) console.log('✅ 데스크톱 드롭다운 요소 발견');
                 
                 desktopBtn.addEventListener('click', (e) => {
                     e.preventDefault();
                     e.stopPropagation();
-                    console.log('🖱️ 데스크톱 언어 버튼 클릭');
+                    if (window.isDebugMode()) console.log('🖱️ 데스크톱 언어 버튼 클릭');
                     this.toggleDropdown(desktopMenu, false);
                 });
                 
-                console.log('✅ 데스크톱 드롭다운 이벤트 연결 완료');
+                if (window.isDebugMode()) console.log('✅ 데스크톱 드롭다운 이벤트 연결 완료');
             } else {
                 console.warn('⚠️ 데스크톱 드롭다운 요소를 찾을 수 없음', {
                     btn: !!desktopBtn,
@@ -187,16 +190,16 @@ class I18nManager {
             const mobileMenu = document.getElementById('mobile-language-dropdown-menu');
             
             if (mobileBtn && mobileMenu) {
-                console.log('✅ 모바일 드롭다운 요소 발견');
+                if (window.isDebugMode()) console.log('✅ 모바일 드롭다운 요소 발견');
                 
                 mobileBtn.addEventListener('click', (e) => {
                     e.preventDefault();
                     e.stopPropagation();
-                    console.log('📱 모바일 언어 버튼 클릭');
+                    if (window.isDebugMode()) console.log('📱 모바일 언어 버튼 클릭');
                     this.toggleDropdown(mobileMenu, true);
                 });
                 
-                console.log('✅ 모바일 드롭다운 이벤트 연결 완료');
+                if (window.isDebugMode()) console.log('✅ 모바일 드롭다운 이벤트 연결 완료');
             } else {
                 console.warn('⚠️ 모바일 드롭다운 요소를 찾을 수 없음', {
                     btn: !!mobileBtn,
@@ -212,7 +215,7 @@ class I18nManager {
                 }
             });
             
-            console.log('✅ 외부 클릭 핸들러 설정 완료');
+            if (window.isDebugMode()) console.log('✅ 외부 클릭 핸들러 설정 완료');
         };
         
         // DOM 상태 확인 후 초기화
@@ -223,14 +226,14 @@ class I18nManager {
             initWhenReady();
         }
         
-        console.log('🎮 언어 드롭다운 이벤트 초기화 설정 완료');
+        if (window.isDebugMode()) console.log('🎮 언어 드롭다운 이벤트 초기화 설정 완료');
     }
 
     /**
      * 🌐 드롭다운 토글 - 🔧 토글 로직 개선
      */
     toggleDropdown(menu, isMobile) {
-        console.log(`🔄 드롭다운 토글 시도: ${isMobile ? '모바일' : '데스크톱'}`);
+        if (window.isDebugMode()) console.log(`🔄 드롭다운 토글 시도: ${isMobile ? '모바일' : '데스크톱'}`);
         
         if (!menu) {
             console.error('❌ 드롭다운 메뉴 요소가 없음');
@@ -243,7 +246,7 @@ class I18nManager {
         this.closeAllDropdowns();
         
         if (isHidden) {
-            console.log('📂 드롭다운 열기');
+            if (window.isDebugMode()) console.log('📂 드롭다운 열기');
             
             // 드롭다운 내용 생성
             this.createLanguageDropdown(menu, isMobile);
@@ -284,7 +287,7 @@ class I18nManager {
      * @param {string} lang - 적용할 언어
      */
     applyTranslations(lang) {
-        console.log(`🔄 번역 적용 시작: ${lang}`);
+        if (window.isDebugMode()) console.log(`🔄 번역 적용 시작: ${lang}`);
         
         if (!this.translations[lang]) {
             console.error(`❌ 언어 데이터가 없습니다: ${lang}`);
@@ -328,7 +331,7 @@ class I18nManager {
             }
         });
 
-        console.log(`✅ 번역 적용 완료: ${appliedCount}개 요소`);
+        if (window.isDebugMode()) console.log(`✅ 번역 적용 완료: ${appliedCount}개 요소`);
     }
 
     /**
@@ -341,7 +344,7 @@ class I18nManager {
             lang = this.fallbackLang;
         }
 
-        console.log(`🔄 언어 변경: ${this.currentLang} → ${lang}`);
+        if (window.isDebugMode()) console.log(`🔄 언어 변경: ${this.currentLang} → ${lang}`);
         
         try {
             // 언어팩이 로드되지 않았으면 로드
@@ -364,7 +367,7 @@ class I18nManager {
             // 현재 언어 표시 업데이트
             this.updateCurrentLanguageDisplay();
             
-            console.log(`✅ 언어 변경 완료: ${lang}`);
+            if (window.isDebugMode()) console.log(`✅ 언어 변경 완료: ${lang}`);
             
             // 커스텀 이벤트 발송 (다른 모듈에서 언어 변경을 감지할 수 있도록)
             window.dispatchEvent(new CustomEvent('languageChanged', { 
@@ -384,17 +387,17 @@ class I18nManager {
         // navigator.language에서 언어 코드 추출
         const browserLang = navigator.language.toLowerCase();
         
-        console.log(`🔍 브라우저 언어 감지: ${navigator.language} → ${browserLang}`);
+        if (window.isDebugMode()) console.log(`🔍 브라우저 언어 감지: ${navigator.language} → ${browserLang}`);
         
         // 정확한 매칭 확인 (예: ko-KR → ko)
         for (const supportedLang of this.supportedLanguages) {
             if (browserLang.startsWith(supportedLang.toLowerCase())) {
-                console.log(`✅ 지원 언어 매칭: ${supportedLang}`);
+                if (window.isDebugMode()) console.log(`✅ 지원 언어 매칭: ${supportedLang}`);
                 return supportedLang;
             }
         }
         
-        console.log(`⚠️ 지원하지 않는 언어, 폴백: ${this.fallbackLang}`);
+        if (window.isDebugMode()) console.log(`⚠️ 지원하지 않는 언어, 폴백: ${this.fallbackLang}`);
         return this.fallbackLang;
     }
 
@@ -406,14 +409,14 @@ class I18nManager {
         // 1순위: localStorage에 저장된 언어
         const savedLang = localStorage.getItem('painori_lang');
         if (savedLang && this.supportedLanguages.includes(savedLang)) {
-            console.log(`💾 저장된 언어 사용: ${savedLang}`);
+            if (window.isDebugMode()) console.log(`💾 저장된 언어 사용: ${savedLang}`);
             return savedLang;
         }
         
         // 2순위: 브라우저 언어
         const browserLang = this.detectBrowserLanguage();
         
-        console.log(`🎯 초기 언어 설정: ${browserLang} (저장된 언어: ${savedLang}, 브라우저: ${navigator.language})`);
+        if (window.isDebugMode()) console.log(`🎯 초기 언어 설정: ${browserLang} (저장된 언어: ${savedLang}, 브라우저: ${navigator.language})`);
         return browserLang;
     }
 
@@ -422,11 +425,11 @@ class I18nManager {
      */
     async init() {
         try {
-            console.log('🚀 I18n Manager 초기화 시작');
+            if (window.isDebugMode()) console.log('🚀 I18n Manager 초기화 시작');
             
             // 1. 초기 언어 결정
             const initialLang = this.getInitialLanguage();
-            console.log(`🎯 초기 언어 결정: ${initialLang}`);
+            if (window.isDebugMode()) console.log(`🎯 초기 언어 결정: ${initialLang}`);
             
             // 2. 언어팩 로드
             await this.loadLanguage(initialLang);
@@ -439,11 +442,11 @@ class I18nManager {
                 this.initDropdownEvents();
             }, 50); // 50ms 후 드롭다운 초기화
             
-            console.log('✅ I18n Manager 초기화 완료');
+            if (window.isDebugMode()) console.log('✅ I18n Manager 초기화 완료');
             
             // 다른 모듈들에게 초기화 완료 신호 전송
             window.dispatchEvent(new CustomEvent('i18nInitialized'));
-            console.log('📡 I18n 초기화 완료 이벤트 발송');
+            if (window.isDebugMode()) console.log('📡 I18n 초기화 완료 이벤트 발송');
             
         } catch (error) {
             console.error('❌ I18n Manager 초기화 실패:', error);
@@ -460,14 +463,14 @@ class I18nManager {
         if (!this.supportedLanguages.includes(langCode)) {
             this.supportedLanguages.push(langCode);
         }
-        console.log(`🌐 새 언어 추가: ${langCode} (${langInfo.nativeName})`);
+        if (window.isDebugMode()) console.log(`🌐 새 언어 추가: ${langCode} (${langInfo.nativeName})`);
     }
 
     /**
      * 🔧 디버그: 지원 언어 목록 출력
      */
     debugLanguages() {
-        console.log('🌐 지원 언어 목록:', {
+        if (window.isDebugMode()) console.log('🌐 지원 언어 목록:', {
             current: this.currentLang,
             supported: this.supportedLanguages,
             available: Object.keys(this.languageInfo),

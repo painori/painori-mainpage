@@ -1,14 +1,17 @@
 /**
  * UI 관리 모듈
  * 모바일 메뉴, 부드러운 스크롤, 전체 UI 상호작용
+ * 🔧 localStorage 기반 DEBUG_MODE 적용
  */
+
+// 🔧 디버그 모드 설정 (localStorage 기반)
 
 class UIManager {
     constructor() {
         this.isMobileMenuOpen = false;
         this.isInitialized = false;
         
-        console.log('🎮 UI Manager 초기화');
+        if (window.isDebugMode()) console.log('🎮 UI Manager 초기화');
     }
 
     /**
@@ -27,10 +30,10 @@ class UIManager {
         
         if (this.isMobileMenuOpen) {
             mobileMenu.classList.remove('hidden');
-            console.log('📱 모바일 메뉴 열림');
+            if (window.isDebugMode()) console.log('📱 모바일 메뉴 열림');
         } else {
             mobileMenu.classList.add('hidden');
-            console.log('📱 모바일 메뉴 닫힘');
+            if (window.isDebugMode()) console.log('📱 모바일 메뉴 닫힘');
         }
     }
 
@@ -43,7 +46,7 @@ class UIManager {
         if (mobileMenu && this.isMobileMenuOpen) {
             mobileMenu.classList.add('hidden');
             this.isMobileMenuOpen = false;
-            console.log('📱 모바일 메뉴 자동 닫힘');
+            if (window.isDebugMode()) console.log('📱 모바일 메뉴 자동 닫힘');
         }
     }
 
@@ -60,7 +63,7 @@ class UIManager {
                 block: 'start'
             });
             
-            console.log(`📜 부드러운 스크롤: ${targetId}`);
+            if (window.isDebugMode()) console.log(`📜 부드러운 스크롤: ${targetId}`);
             
             // 모바일 메뉴 자동 닫기
             this.closeMobileMenu();
@@ -80,7 +83,7 @@ class UIManager {
                 this.toggleMobileMenu();
             });
             
-            console.log('📱 모바일 메뉴 버튼 이벤트 초기화 완료');
+            if (window.isDebugMode()) console.log('📱 모바일 메뉴 버튼 이벤트 초기화 완료');
         } else {
             console.warn('⚠️ 모바일 메뉴 버튼을 찾을 수 없음');
         }
@@ -102,7 +105,7 @@ class UIManager {
             });
         });
         
-        console.log('📜 부드러운 스크롤 이벤트 초기화 완료');
+        if (window.isDebugMode()) console.log('📜 부드러운 스크롤 이벤트 초기화 완료');
     }
 
     /**
@@ -124,7 +127,7 @@ class UIManager {
             }
         });
         
-        console.log('🖱️ 외부 클릭 핸들러 초기화 완료');
+        if (window.isDebugMode()) console.log('🖱️ 외부 클릭 핸들러 초기화 완료');
     }
 
     /**
@@ -138,7 +141,7 @@ class UIManager {
             }
         });
         
-        console.log('⌨️ 키보드 이벤트 초기화 완료');
+        if (window.isDebugMode()) console.log('⌨️ 키보드 이벤트 초기화 완료');
     }
 
     /**
@@ -152,7 +155,7 @@ class UIManager {
             }
         });
         
-        console.log('📏 리사이즈 핸들러 초기화 완료');
+        if (window.isDebugMode()) console.log('📏 리사이즈 핸들러 초기화 완료');
     }
 
     /**
@@ -184,7 +187,7 @@ class UIManager {
             }
         });
         
-        console.log('📜 스크롤 효과 초기화 완료');
+        if (window.isDebugMode()) console.log('📜 스크롤 효과 초기화 완료');
     }
 
     /**
@@ -210,7 +213,7 @@ class UIManager {
             });
         });
         
-        console.log('📝 폼 개선사항 초기화 완료');
+        if (window.isDebugMode()) console.log('📝 폼 개선사항 초기화 완료');
     }
 
     /**
@@ -233,7 +236,7 @@ class UIManager {
         // 건너뛰기 링크 추가 (접근성)
         this.addSkipLinks();
         
-        console.log('♿ 접근성 기능 초기화 완료');
+        if (window.isDebugMode()) console.log('♿ 접근성 기능 초기화 완료');
     }
 
     /**
@@ -276,7 +279,7 @@ class UIManager {
                 imageObserver.observe(img);
             });
             
-            console.log('🖼️ 이미지 지연 로딩 초기화 완료');
+            if (window.isDebugMode()) console.log('🖼️ 이미지 지연 로딩 초기화 완료');
         }
     }
 
@@ -300,7 +303,7 @@ class UIManager {
             e.preventDefault(); // 콘솔 에러 방지
         });
         
-        console.log('🛡️ 에러 핸들링 초기화 완료');
+        if (window.isDebugMode()) console.log('🛡️ 에러 핸들링 초기화 완료');
     }
 
     /**
@@ -309,7 +312,7 @@ class UIManager {
     initDeveloperTools() {
         if (window.location.hostname === 'localhost' || window.location.hostname.includes('127.0.0.1')) {
             // 개발 환경에서만 실행
-            console.log('🛠️ 개발자 모드 활성화');
+            if (window.isDebugMode()) console.log('🛠️ 개발자 모드 활성화');
             
             // 전역 디버그 함수들
             window.PainoriDebug = {
@@ -333,7 +336,7 @@ class UIManager {
                 }
             };
             
-            console.log('🛠️ 개발자 도구 초기화 완료 - window.PainoriDebug 사용 가능');
+            if (window.isDebugMode()) console.log('🛠️ 개발자 도구 초기화 완료 - window.PainoriDebug 사용 가능');
         }
     }
 
@@ -342,7 +345,7 @@ class UIManager {
      */
     async init() {
         try {
-            console.log('🚀 UI Manager 초기화 시작');
+            if (window.isDebugMode()) console.log('🚀 UI Manager 초기화 시작');
             
             // 모바일 메뉴 이벤트
             this.initMobileMenuEvents();
@@ -378,7 +381,7 @@ class UIManager {
             this.initDeveloperTools();
             
             this.isInitialized = true;
-            console.log('✅ UI Manager 초기화 완료');
+            if (window.isDebugMode()) console.log('✅ UI Manager 초기화 완료');
             
         } catch (error) {
             console.error('❌ UI Manager 초기화 실패:', error);
@@ -389,7 +392,7 @@ class UIManager {
      * 정리 함수 (페이지 언로드 시)
      */
     cleanup() {
-        console.log('🧹 UI Manager 정리');
+        if (window.isDebugMode()) console.log('🧹 UI Manager 정리');
         // 필요한 경우 이벤트 리스너 제거
     }
 }
