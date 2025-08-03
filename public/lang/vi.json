@@ -73,5 +73,7 @@
   "footer_solo_dev": "🤖 Một nhà phát triển đơn độc cùng siêu năng lực AI xây dựng",
   "game_testnet_btn": "Chơi thử miễn phí 🎮",
   "game_browser_notice": "💡 Để có trải nghiệm tốt nhất, nên dùng Pi Browser!",
-  "game_guest_mode_info": "Trình duyệt thường: Chế độ Khách (Hạn chế) | Pi Browser: Đầy đủ tính năng + Phần thưởng"
+  "game_guest_mode_info": "Trình duyệt thường: Chế độ Khách (Hạn chế) | Pi Browser: Đầy đủ tính năng + Phần thưởng",
+  "nickname_not_available": "Biệt danh này không có sẵn.",
+  "nickname_validation_error": "Xác thực biệt danh thất bại. Vui lòng thử lại."
 }

@@ -4,6 +4,7 @@
  * 🔧 22개국 언어 특수문자 완전 지원 (이벤트 위임 방식)
  * 🎯 onclick 속성 제거로 XSS 방지 및 다국어 안전성 확보
  * 🔒 lukep81 닉네임 서버사이드 보호 (절대 확인 불가능)
+ * 🌐 언어팩 시스템 적용 (닉네임 검증 에러 메시지)
  */
 
 class BoardManager {
@@ -24,7 +25,7 @@ class BoardManager {
         // 🔒 REMOVED: 클라이언트사이드 보호 설정 완전 제거
         // 이제 모든 검증은 서버에서만 수행됨 (절대 확인 불가능)
         
-        console.log('📝 Board Manager 초기화 (서버사이드 닉네임 검증 + 이벤트 위임 + 다국어 안전 버전)');
+        console.log('📝 Board Manager 초기화 (서버사이드 닉네임 검증 + 이벤트 위임 + 다국어 안전 + 언어팩 시스템 버전)');
     }
 
     /**
@@ -62,12 +63,11 @@ class BoardManager {
 
     /**
      * 🔒 NEW: 서버사이드 닉네임 검증 (절대 확인 불가능)
+     * 🌐 UPDATED: 언어팩 시스템 적용
      * @param {string} nickname - 입력된 닉네임
      * @returns {Object} {isValid: boolean, processedNickname: string, errorMessage: string, isAdmin: boolean}
      */
     async validateNickname(nickname) {
-        const lang = window.PainoriI18n.currentLang;
-        
         try {
             const { functions } = this.getFirebaseRefs();
             
@@ -84,12 +84,11 @@ class BoardManager {
             const { isValid, processedNickname, error, isAdmin } = result.data;
             
             if (!isValid) {
+                // 🌐 UPDATED: 언어팩 시스템 사용
                 // 서버에서 차단된 닉네임
                 console.log('🚫 서버에서 닉네임 차단됨');
                 
-                const errorMessage = lang === 'ko' ? 
-                    '이 닉네임은 사용할 수 없습니다. 다른 닉네임을 선택해주세요.' :
-                    'This nickname is not available. Please choose a different nickname.';
+                const errorMessage = window.PainoriI18n.t('nickname_not_available');
                 
                 return {
                     isValid: false,
@@ -116,10 +115,9 @@ class BoardManager {
         } catch (error) {
             console.error('❌ 서버사이드 닉네임 검증 실패:', error);
             
+            // 🌐 UPDATED: 언어팩 시스템 사용
             // 서버 에러 시 안전한 폴백
-            const errorMessage = lang === 'ko' ? 
-                '닉네임 검증 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.' :
-                'An error occurred during nickname validation. Please try again later.';
+            const errorMessage = window.PainoriI18n.t('nickname_validation_error');
             
             return {
                 isValid: false,
@@ -808,7 +806,7 @@ class BoardManager {
      */
     async init() {
         try {
-            console.log('🚀 Board Manager 초기화 시작 (서버사이드 닉네임 검증 버전)');
+            console.log('🚀 Board Manager 초기화 시작 (서버사이드 닉네임 검증 + 언어팩 시스템 버전)');
             
             // 🔧 NEW: 이벤트 위임 시스템 초기화 (가장 먼저)
             this.initEventDelegation();
@@ -827,6 +825,7 @@ class BoardManager {
             console.log('🔒 22개국 언어 특수문자 완전 지원');
             console.log('🎯 이벤트 위임으로 성능 및 보안 향상');
             console.log('💰 실시간 리스너 제거로 비용 95% 절감');
+            console.log('🌐 언어팩 시스템으로 글로벌 서비스 대응');
             
         } catch (error) {
             console.error('❌ Board Manager 초기화 실패:', error);

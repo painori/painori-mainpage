@@ -73,5 +73,7 @@
   "footer_solo_dev": "🤖 Nilikha ng isang solo developer gamit ang AI superpowers",
   "game_testnet_btn": "Subukan nang Libre 🎮",
   "game_browser_notice": "💡 Para sa pinakamahusay na karanasan, inirerekomenda ang paggamit ng Pi Browser!",
-  "game_guest_mode_info": "Regular Browser: Guest Mode (Limited) | Pi Browser: Buong Features + Rewards"
+  "game_guest_mode_info": "Regular Browser: Guest Mode (Limited) | Pi Browser: Buong Features + Rewards",
+  "nickname_not_available": "Hindi available ang palayaw na ito.",
+  "nickname_validation_error": "Nabigo ang pag-verify ng palayaw. Pakisubukang muli."
 }

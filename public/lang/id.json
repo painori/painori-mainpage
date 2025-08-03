@@ -73,5 +73,7 @@
   "footer_solo_dev": "🤖 Dibuat oleh developer tunggal dengan kekuatan super AI",
   "game_testnet_btn": "Coba Gratis 🎮",
   "game_browser_notice": "💡 Untuk pengalaman terbaik, disarankan menggunakan Pi Browser!",
-  "game_guest_mode_info": "Browser Biasa: Mode Tamu (Terbatas) | Pi Browser: Fitur Penuh + Hadiah"
+  "game_guest_mode_info": "Browser Biasa: Mode Tamu (Terbatas) | Pi Browser: Fitur Penuh + Hadiah",
+  "nickname_not_available": "Nama panggilan ini tidak tersedia.",
+  "nickname_validation_error": "Validasi nama panggilan gagal. Silakan coba lagi."
 }

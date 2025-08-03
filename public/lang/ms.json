@@ -73,5 +73,7 @@
   "footer_solo_dev": "🤖 Dibina oleh pembangun solo dengan kuasa hebat AI",
   "game_testnet_btn": "Cuba Percuma 🎮",
   "game_browser_notice": "💡 Untuk pengalaman terbaik, disyorkan menggunakan Pelayar Pi!",
-  "game_guest_mode_info": "Pelayar Biasa: Mod Tetamu (Terhad) | Pelayar Pi: Ciri Penuh + Ganjaran"
+  "game_guest_mode_info": "Pelayar Biasa: Mod Tetamu (Terhad) | Pelayar Pi: Ciri Penuh + Ganjaran",
+  "nickname_not_available": "Nama samaran ini tidak tersedia.",
+  "nickname_validation_error": "Pengesahan nama samaran gagal. Sila cuba lagi."
 }

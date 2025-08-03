@@ -43,7 +43,7 @@ exports.validateNickname = onCall(async (request) => {
   try {
     console.log('🔒 서버사이드 닉네임 검증 요청:', request.data.nickname);
     
-    const nickname = request.data.nickname?.trim();
+    const nickname = request.data.nickname ? request.data.nickname.trim() : null;
     
     if (!nickname) {
       return {

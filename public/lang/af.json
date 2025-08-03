@@ -73,5 +73,7 @@
   "footer_solo_dev": "🤖 Gebou deur 'n solo-ontwikkelaar met KI-superkragte",
   "game_testnet_btn": "Probeer Gratis 🎮",
   "game_browser_notice": "💡 Vir die beste ervaring word die gebruik van Pi Browser aanbeveel!",
-  "game_guest_mode_info": "Gewone Blaaier: Gasmodus (Beperk) | Pi Browser: Volledige Kenmerke + Belonings"
+  "game_guest_mode_info": "Gewone Blaaier: Gasmodus (Beperk) | Pi Browser: Volledige Kenmerke + Belonings",
+  "nickname_not_available": "Hierdie bynaam is nie beskikbaar nie.",
+  "nickname_validation_error": "Bynaam-validering het misluk. Probeer asseblief weer."
 }

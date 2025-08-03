@@ -73,5 +73,7 @@
   "footer_solo_dev": "🤖 Yksittäisen kehittäjän ja tekoälyn supervoimien rakentama",
   "game_testnet_btn": "Kokeile ilmaiseksi 🎮",
   "game_browser_notice": "💡 Parhaan kokemuksen saamiseksi suosittelemme Pi-selainta!",
-  "game_guest_mode_info": "Tavallinen selain: Vierastila (Rajoitettu) | Pi-selain: Kaikki ominaisuudet + Palkinnot"
+  "game_guest_mode_info": "Tavallinen selain: Vierastila (Rajoitettu) | Pi-selain: Kaikki ominaisuudet + Palkinnot",
+  "nickname_not_available": "Tämä nimimerkki ei ole saatavilla.",
+  "nickname_validation_error": "Nimimerkin vahvistus epäonnistui. Yritä uudelleen."
 }

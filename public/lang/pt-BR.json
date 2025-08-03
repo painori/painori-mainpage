@@ -73,5 +73,7 @@
   "footer_solo_dev": "🤖 Criado por um único desenvolvedor com superpoderes de IA",
   "game_testnet_btn": "Teste Grátis 🎮",
   "game_browser_notice": "💡 Para a melhor experiência, recomendamos usar o Pi Browser!",
-  "game_guest_mode_info": "Navegador Comum: Modo Visitante (Limitado) | Pi Browser: Funções Completas + Recompensas"
+  "game_guest_mode_info": "Navegador Comum: Modo Visitante (Limitado) | Pi Browser: Funções Completas + Recompensas",
+  "nickname_not_available": "Este apelido não está disponível.",
+  "nickname_validation_error": "Falha na validação do apelido. Tente novamente."
 }

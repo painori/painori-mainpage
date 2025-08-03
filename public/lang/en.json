@@ -81,5 +81,7 @@
   "footer_solo_dev": "🤖 Built by a solo developer with AI superpowers",
   "game_testnet_btn": "Try for Free 🎮",
   "game_browser_notice": "💡 For the best experience, using Pi Browser is recommended!",
-  "game_guest_mode_info": "Regular Browser: Guest Mode (Limited) | Pi Browser: Full Features + Rewards"
+  "game_guest_mode_info": "Regular Browser: Guest Mode (Limited) | Pi Browser: Full Features + Rewards",
+  "nickname_not_available": "This nickname is unavailable.",
+  "nickname_validation_error": "Nickname validation failed. Please try again."
 }

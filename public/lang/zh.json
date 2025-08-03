@@ -73,5 +73,7 @@
   "footer_solo_dev": "🤖 一位开发者与AI超能力共同打造",
   "game_testnet_btn": "免费体验 🎮",
   "game_browser_notice": "💡 为获得最佳体验，推荐使用Pi浏览器！",
-  "game_guest_mode_info": "普通浏览器：访客模式(受限) | Pi浏览器：完整功能 + 奖励"
+  "game_guest_mode_info": "普通浏览器：访客模式(受限) | Pi浏览器：完整功能 + 奖励",
+  "nickname_not_available": "该昵称不可用。",
+  "nickname_validation_error": "昵称验证失败，请重试。"
 }

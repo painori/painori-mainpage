@@ -73,5 +73,7 @@
   "footer_solo_dev": "🤖 Von einem Entwickler mit KI-Superkräften erstellt",
   "game_testnet_btn": "Kostenlos testen 🎮",
   "game_browser_notice": "💡 Für das beste Erlebnis wird der Pi Browser empfohlen!",
-  "game_guest_mode_info": "Normaler Browser: Gastmodus (Eingeschränkt) | Pi Browser: Volle Funktionen + Belohnungen"
+  "game_guest_mode_info": "Normaler Browser: Gastmodus (Eingeschränkt) | Pi Browser: Volle Funktionen + Belohnungen",
+  "nickname_not_available": "Dieser Nickname ist nicht verfügbar.",
+  "nickname_validation_error": "Nickname-Validierung fehlgeschlagen. Bitte erneut versuchen."
 }
