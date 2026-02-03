@@ -150,18 +150,27 @@ const Lounge = () => {
             } else {
                 // CREATE Logic
                 // 1. Validate Nickname (Optional)
+                let finalNickname = formData.nickname;
+
                 try {
                     const validateNickname = httpsCallable(functions, 'validateNickname');
                     const validationResult = await validateNickname({ nickname: formData.nickname });
-                    if (validationResult.data && !validationResult.data.isValid) {
-                        alert(validationResult.data.errorMessage || "Invalid nickname.");
-                        setSubmitting(false);
-                        return;
+
+                    if (validationResult.data) {
+                        if (!validationResult.data.isValid) {
+                            alert(validationResult.data.errorMessage || "Invalid nickname.");
+                            setSubmitting(false);
+                            return;
+                        }
+                        // Use the processed nickname from server (handles admin masking)
+                        if (validationResult.data.processedNickname) {
+                            finalNickname = validationResult.data.processedNickname;
+                        }
                     }
                 } catch (err) { }
 
                 await addDoc(collection(db, "posts"), {
-                    nickname: formData.nickname,
+                    nickname: finalNickname,
                     password: hashedPassword,
                     title: formData.title,
                     content: formData.content,
