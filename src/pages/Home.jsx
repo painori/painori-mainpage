@@ -113,7 +113,7 @@ const Home = () => {
                                 </p>
                                 <div className="flex flex-col sm:flex-row items-center gap-6 justify-center md:justify-start">
                                     <a
-                                        href="https://testspot.painori.com"
+                                        href="https://spot.painori.com"
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="px-8 py-4 bg-orange-500 text-white rounded-2xl font-bold text-lg hover:bg-orange-600 transition-all shadow-lg hover:shadow-orange-500/30 flex items-center justify-center gap-2 transform hover:-translate-y-1"
@@ -158,8 +158,8 @@ const Home = () => {
             <section className="py-24 relative z-10">
                 <div className="container mx-auto px-4">
                     <div className="text-center mb-16">
-                        <span className="text-orange-500 font-bold uppercase tracking-wider text-sm mb-2 block">How It Works</span>
-                        <h2 className="text-4xl font-bold text-gray-900">Explore, Occupy, Enjoy</h2>
+                        <span className="text-orange-500 font-bold uppercase tracking-wider text-sm mb-2 block">{t('how_it_works')}</span>
+                        <h2 className="text-4xl font-bold text-gray-900">{t('main_feature_title')}</h2>
                     </div>
 
                     <div className="grid md:grid-cols-3 gap-8 md:gap-12">
@@ -190,11 +190,11 @@ const Home = () => {
                 <div className="container mx-auto px-4">
                     <div className="flex justify-between items-end mb-12">
                         <div>
-                            <h2 className="text-3xl font-bold mb-3 text-gray-900">{t('community_driven', 'Community Driven')}</h2>
-                            <p className="text-gray-500 text-lg">{t('community_driven_desc', 'Connect with pioneers from 33 countries.')}</p>
+                            <h2 className="text-3xl font-bold mb-3 text-gray-900">{t('trend_title')}</h2>
+                            <p className="text-gray-500 text-lg">{t('trend_desc')}</p>
                         </div>
                         <Link to="/lounge" className="hidden md:flex items-center gap-2 text-orange-600 font-bold hover:text-orange-700 transition-colors">
-                            {t('meet_pioneers', 'Meet Pioneers')} <ArrowRight size={20} />
+                            {t('enter_lounge')} <ArrowRight size={20} />
                         </Link>
                     </div>
 
@@ -233,7 +233,7 @@ const Home = () => {
                     </div>
                     <div className="mt-8 text-center md:hidden">
                         <Link to="/lounge" className="inline-flex items-center gap-2 text-orange-600 font-bold hover:text-orange-700 transition-colors">
-                            {t('meet_pioneers')} <ArrowRight size={20} />
+                            {t('enter_lounge')} <ArrowRight size={20} />
                         </Link>
                     </div>
                 </div>

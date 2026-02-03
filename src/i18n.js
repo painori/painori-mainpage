@@ -22,7 +22,7 @@ i18n
         },
 
         backend: {
-            loadPath: `/locales/{{lng}}.json?v=${Date.now()}`,
+            loadPath: `/locales/{{lng}}.json?v=${Date.now() + 5}`,
         },
 
         detection: {

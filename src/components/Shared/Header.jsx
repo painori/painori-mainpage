@@ -10,10 +10,10 @@ const Header = () => {
     const isDarkTheme = location.pathname === '/dev-story';
 
     const navItems = [
-        { name: 'SPOT GO', path: '/', translationKey: 'spot_go' },
-        { name: 'NEWS', path: '/news', translationKey: 'news' },
-        { name: 'LOUNGE', path: '/lounge', translationKey: 'lounge' },
-        { name: 'DEV STORY', path: '/dev-story', highlight: true, translationKey: 'dev_story' },
+        { name: 'SPOT GO', path: '/', translationKey: 'nav_spot_go' },
+        { name: 'NEWS', path: '/news', translationKey: 'nav_trend' },
+        { name: 'LOUNGE', path: '/lounge', translationKey: 'nav_lounge' },
+        { name: 'DEV STORY', path: '/dev-story', highlight: true, translationKey: 'nav_dev_story' },
     ];
 
     const changeLanguage = (lng) => {
@@ -27,7 +27,7 @@ const Header = () => {
     const languages = [
         { code: 'ko', name: '한국어' },
         { code: 'en', name: 'English' },
-        { code: 'jp', name: '日本語' }, // check code
+        { code: 'jp', name: '日本語' },
         { code: 'cn', name: '简体中文' },
         { code: 'tw', name: '繁體中文' },
         { code: 'vn', name: 'Tiếng Việt' },
@@ -49,8 +49,6 @@ const Header = () => {
         { code: 'fi', name: 'Suomi' }
     ];
 
-    // Mapping logic to match the file names in public/locales if codes differ
-    // Based on file list: af, ar, bn, de, en, es, fi, fil, fr, hi, id, ja, ko, ms, my, pt-BR, th, tr, ur, vi, zh, zh-TW
     const languageMap = [
         { code: 'ko', label: 'KR 한국어' },
         { code: 'en', label: 'US English' },
@@ -97,8 +95,7 @@ const Header = () => {
                     ${location.pathname === item.path ? hoverColor : ''}
                   `}
                                 >
-                                    {/* Fallback to name if translation missing, though keys should exist */}
-                                    {item.name}
+                                    {t(item.translationKey)}
                                 </Link>
                             ))}
                         </nav>
@@ -148,13 +145,13 @@ const Header = () => {
                   `}
                                     onClick={() => setIsMenuOpen(false)}
                                 >
-                                    {item.name}
+                                    {t(item.translationKey)}
                                 </Link>
                             ))}
 
                             {/* Language Selector (Mobile) */}
                             <div className="pt-4 border-t border-gray-100">
-                                <div className="text-xs text-gray-400 mb-2 px-2">Select Language</div>
+                                <div className="text-xs text-gray-400 mb-2 px-2">{t('language_select')}</div>
                                 <div className="grid grid-cols-2 gap-2">
                                     {languageMap.map((lang) => (
                                         <button

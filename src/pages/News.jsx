@@ -11,6 +11,7 @@ const News = () => {
     const [newsData, setNewsData] = useState({ pi: [], crypto: [] });
     const [loading, setLoading] = useState({ pi: false, crypto: false });
     const [error, setError] = useState({ pi: null, crypto: null });
+    const [visibleCount, setVisibleCount] = useState(5);
 
     useEffect(() => {
         fetchNews('pi');
@@ -45,21 +46,21 @@ const News = () => {
         <div className="bg-gray-50 min-h-screen py-12">
             <div className="container mx-auto px-4 max-w-4xl">
                 <div className="text-center mb-10">
-                    <h1 className="text-3xl font-bold mb-2 text-gray-900">{t('news_title', 'Ecosystem News')}</h1>
-                    <p className="text-gray-500">{t('news_subtitle', 'Stay updated with Pi Network & Crypto trends')}</p>
+                    <h1 className="text-3xl font-bold mb-2 text-gray-900">{t('trend_title')}</h1>
+                    <p className="text-gray-500">{t('trend_desc')}</p>
                 </div>
 
                 {/* Tabs */}
                 <div className="flex justify-center border-b border-gray-200 mb-8">
                     <button
                         className={`px-6 py-3 font-semibold border-b-2 transition-colors ${activeTab === 'pi' ? 'border-orange-500 text-orange-500' : 'border-transparent text-gray-500 hover:text-gray-700'}`}
-                        onClick={() => setActiveTab('pi')}
+                        onClick={() => { setActiveTab('pi'); setVisibleCount(5); }}
                     >
                         {t('news_tab_pi', 'Pi Network')}
                     </button>
                     <button
                         className={`px-6 py-3 font-semibold border-b-2 transition-colors ${activeTab === 'crypto' ? 'border-blue-500 text-blue-500' : 'border-transparent text-gray-500 hover:text-gray-700'}`}
-                        onClick={() => setActiveTab('crypto')}
+                        onClick={() => { setActiveTab('crypto'); setVisibleCount(5); }}
                     >
                         {t('news_tab_crypto', 'Crypto News')}
                     </button>
@@ -86,34 +87,45 @@ const News = () => {
                     )}
 
                     {!isLoading && currentNews.length > 0 && (
-                        <div className="grid gap-4">
-                            {currentNews.slice(0, 10).map((item, idx) => (
-                                <motion.a
-                                    key={idx}
-                                    href={item.url}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    initial={{ opacity: 0, y: 10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: idx * 0.05 }}
-                                    className="block bg-white p-5 rounded-xl border border-gray-100 hover:shadow-md transition-shadow group"
-                                >
-                                    <div className="flex justify-between items-start gap-4">
-                                        <div>
-                                            <h3 className="font-bold text-gray-800 mb-2 group-hover:text-orange-500 transition-colors line-clamp-2">{item.title}</h3>
-                                            <div className="text-xs text-gray-400 flex items-center gap-2">
-                                                <span className={`px-2 py-0.5 rounded-full ${activeTab === 'pi' ? 'bg-orange-50 text-orange-600' : 'bg-blue-50 text-blue-600'}`}>
-                                                    {item.source?.name || 'Unknown'}
-                                                </span>
-                                                <span>•</span>
-                                                <span>{t('news_click_to_read', 'Click to read')}</span>
+                        <>
+                            <div className="grid gap-4 mb-6">
+                                {currentNews.slice(0, visibleCount).map((item, idx) => (
+                                    <motion.a
+                                        key={idx}
+                                        href={item.url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        initial={{ opacity: 0, y: 10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ delay: idx * 0.05 }}
+                                        className="block bg-white p-5 rounded-xl border border-gray-100 hover:shadow-md transition-shadow group"
+                                    >
+                                        <div className="flex justify-between items-start gap-4">
+                                            <div>
+                                                <h3 className="font-bold text-gray-800 mb-2 group-hover:text-orange-500 transition-colors line-clamp-2">{item.title}</h3>
+                                                <div className="text-xs text-gray-400 flex items-center gap-2">
+                                                    <span className={`px-2 py-0.5 rounded-full ${activeTab === 'pi' ? 'bg-orange-50 text-orange-600' : 'bg-blue-50 text-blue-600'}`}>
+                                                        {item.source?.name || 'Unknown'}
+                                                    </span>
+                                                    <span>•</span>
+                                                    <span>{t('news_click_to_read', 'Click to read')}</span>
+                                                </div>
                                             </div>
+                                            <Rss size={16} className="text-gray-300 flex-shrink-0 mt-1" />
                                         </div>
-                                        <Rss size={16} className="text-gray-300 flex-shrink-0 mt-1" />
-                                    </div>
-                                </motion.a>
-                            ))}
-                        </div>
+                                    </motion.a>
+                                ))}
+                            </div>
+
+                            {visibleCount < currentNews.length && (
+                                <button
+                                    onClick={() => setVisibleCount(prev => prev + 5)}
+                                    className="w-full py-3 bg-[#6B7280] hover:bg-[#4B5563] text-white rounded-md transition-colors font-bold shadow-sm text-sm"
+                                >
+                                    {t('load_more_posts', '더 많은 글 보기')}
+                                </button>
+                            )}
+                        </>
                     )}
                 </div>
             </div>

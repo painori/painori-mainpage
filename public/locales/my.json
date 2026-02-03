@@ -75,5 +75,9 @@
   "game_browser_notice": "💡 အကောင်းဆုံးအတွေ့အကြုံအတွက် Pi Browser ကိုအသုံးပြုရန် အကြံပြုပါသည်!",
   "game_guest_mode_info": "သာမန်ဘရောက်ဇာ: ဧည့်သည်မုဒ် (ကန့်သတ်) | Pi Browser: လုပ်ဆောင်ချက်အပြည့်အစုံ + ဆုများ",
   "nickname_not_available": "ဤအမည်ပြောင်ကို အသုံးပြု၍မရပါ။",
-  "nickname_validation_error": "အမည်ပြောင်စစ်ဆေးခြင်း မအောင်မြင်ပါ။ ထပ်မံကြိုးစားပါ။"
+  "nickname_validation_error": "အမည်ပြောင်စစ်ဆေးခြင်း မအောင်မြင်ပါ။ ထပ်မံကြိုးစားပါ။",
+  "stats_unique_today": "Today Unique Visitors",
+  "stats_unique_total": "Total Unique Visitors",
+  "stats_since": "Since 2026.02.03 (KST)",
+  "stats_aggregated": "Counted"
 }
