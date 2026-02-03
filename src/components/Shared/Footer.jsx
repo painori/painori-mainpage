@@ -40,23 +40,26 @@ const Footer = () => {
         <footer id="contact" className="bg-navy-900 text-gray-300 py-8 border-t border-white/5 relative overflow-hidden">
             <div className="container mx-auto px-4 text-center relative">
 
-                {/* Visitor Counter: Absolute Positioned (Left of Painori) */}
-                <div className="absolute top-0 left-4 md:left-0 z-10">
+                {/* Visitor Counter: Mobile (Stacked) / Desktop (Absolute Left) */}
+                <div className="relative mb-6 md:mb-0 md:absolute md:top-0 md:left-0 z-10 flex justify-center md:block">
                     <VisitorCounter />
                 </div>
 
-                <h2 className="text-2xl font-bold text-white mb-2 relative z-0">Painori</h2>
-                <p className="text-sm text-gray-400 mb-6">Planning with AI Insight NORI</p>
+                {/* Main Content */}
+                <div className="">
+                    <h2 className="text-2xl font-bold text-white mb-2 relative z-0">Painori</h2>
+                    <p className="text-xs text-gray-500 mb-6">Planning with AI Insight NORI</p>
 
-                <div className="flex justify-center items-center space-x-6 mb-6 text-sm text-gray-400">
-                    <Link to="/news" className="hover:text-orange-500 transition-colors">News</Link>
-                    <span className="text-gray-600">|</span>
-                    <button onClick={() => openLegalModal('privacy')} className="hover:text-orange-500 transition-colors">Privacy Policy</button>
-                    <span className="text-gray-600">|</span>
-                    <button onClick={() => openLegalModal('terms')} className="hover:text-orange-500 transition-colors">Terms of Service</button>
+                    <div className="flex justify-center items-center space-x-3 mb-6 text-[10px] text-gray-400 flex-wrap gap-y-2">
+                        <Link to="/news" className="hover:text-orange-500 transition-colors">News</Link>
+                        <span className="text-gray-700">|</span>
+                        <button onClick={() => openLegalModal('privacy')} className="hover:text-orange-500 transition-colors">Privacy Policy</button>
+                        <span className="text-gray-700">|</span>
+                        <button onClick={() => openLegalModal('terms')} className="hover:text-orange-500 transition-colors">Terms of Service</button>
+                    </div>
+
+                    <p className="text-xs mb-2 text-gray-500">Contact: <a href="mailto:lukep81@painori.com" className="text-orange-500 hover:underline">lukep81@painori.com</a></p>
                 </div>
-
-                <p className="text-sm mb-2 text-gray-500">Contact: <a href="mailto:lukep81@painori.com" className="text-orange-500 hover:underline">lukep81@painori.com</a></p>
 
                 <p className="text-xs text-gray-600 italic mb-4">
                     Built by a solo developer with AI superpowers

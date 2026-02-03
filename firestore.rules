@@ -5,6 +5,11 @@ service cloud.firestore {
     match /stats/{document=**} {
       allow read, write: if true;
     }
+
+    // Allow public read/write for lounge posts
+    match /posts/{document=**} {
+      allow read, write: if true;
+    }
     
     // Keep other collections secure (adjust as needed)
     match /{document=**} {

@@ -105,10 +105,10 @@ const Home = () => {
                                     <LiveTicker t={t} />
                                 </div>
 
-                                <h1 className="text-5xl md:text-7xl font-bold mb-6 text-gray-900 leading-[1.1] tracking-tight">
+                                <h1 className="text-3xl md:text-5xl font-bold mb-6 text-gray-900 leading-[1.1] tracking-tight">
                                     {t('hero_title')}
                                 </h1>
-                                <p className="text-xl text-gray-500 mb-10 max-w-xl mx-auto md:mx-0 font-medium leading-relaxed">
+                                <p className="text-lg text-gray-500 mb-10 max-w-xl mx-auto md:mx-0 font-medium leading-relaxed">
                                     {t('hero_subtitle')}
                                 </p>
                                 <div className="flex flex-col sm:flex-row items-center gap-6 justify-center md:justify-start">
@@ -159,7 +159,7 @@ const Home = () => {
                 <div className="container mx-auto px-4">
                     <div className="text-center mb-16">
                         <span className="text-orange-500 font-bold uppercase tracking-wider text-sm mb-2 block">{t('how_it_works')}</span>
-                        <h2 className="text-4xl font-bold text-gray-900">{t('main_feature_title')}</h2>
+                        <h2 className="text-3xl font-bold text-gray-900">{t('main_feature_title')}</h2>
                     </div>
 
                     <div className="grid md:grid-cols-3 gap-8 md:gap-12">
@@ -190,7 +190,7 @@ const Home = () => {
                 <div className="container mx-auto px-4">
                     <div className="flex justify-between items-end mb-12">
                         <div>
-                            <h2 className="text-3xl font-bold mb-3 text-gray-900">{t('trend_title')}</h2>
+                            <h2 className="text-2xl font-bold mb-3 text-gray-900">{t('trend_title')}</h2>
                             <p className="text-gray-500 text-lg">{t('trend_desc')}</p>
                         </div>
                         <Link to="/lounge" className="hidden md:flex items-center gap-2 text-orange-600 font-bold hover:text-orange-700 transition-colors">

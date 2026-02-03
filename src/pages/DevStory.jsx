@@ -86,7 +86,7 @@ const DevStory = () => {
                             <img src={profileImg} alt="Architect" className="w-full h-full object-cover" />
                         </div>
                         <div>
-                            <h2 className="text-3xl font-bold text-white mb-1">{t('dev_profile_title')}</h2>
+                            <h2 className="text-2xl font-bold text-white mb-1">{t('dev_profile_title')}</h2>
                             <p className="text-gray-400 font-medium">Solo PM & Orchestrator</p>
                         </div>
                     </div>
@@ -114,7 +114,7 @@ const DevStory = () => {
             color: "text-cyan-400",
             content: (
                 <div className="space-y-6">
-                    <h2 className="text-3xl font-bold text-white mb-4">{t('dev_tech_title')}</h2>
+                    <h2 className="text-2xl font-bold text-white mb-4">{t('dev_tech_title')}</h2>
                     <p className="text-gray-300 text-lg mb-6">{t('dev_tech_desc')}</p>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="p-4 bg-white/5 rounded-xl border border-white/10 flex items-center gap-3">
@@ -144,7 +144,7 @@ const DevStory = () => {
             bgImage: archImg,
             content: (
                 <div className="space-y-6">
-                    <h2 className="text-3xl font-bold text-white mb-2">{t('dev_cost_title')}</h2>
+                    <h2 className="text-2xl font-bold text-white mb-2">{t('dev_cost_title')}</h2>
                     <p className="text-gray-300 text-lg">{t('dev_cost_desc')}</p>
                     <div className="p-4 bg-green-500/10 border border-green-500/20 rounded-xl">
                         <h3 className="text-green-400 font-bold mb-1">{t('dev_cost_detail_title')}</h3>
@@ -164,7 +164,7 @@ const DevStory = () => {
             bgImage: shopImg,
             content: (
                 <div className="space-y-6">
-                    <h2 className="text-3xl font-bold text-white mb-2">{t('dev_economy_title')}</h2>
+                    <h2 className="text-2xl font-bold text-white mb-2">{t('dev_economy_title')}</h2>
                     <p className="text-gray-300 text-lg">{t('dev_economy_desc')}</p>
                     <div className="flex items-center justify-between p-4 bg-white/5 rounded-xl border border-white/10">
                         <div className="text-center">
@@ -191,7 +191,7 @@ const DevStory = () => {
             bgImage: globalImg,
             content: (
                 <div className="space-y-6">
-                    <h2 className="text-3xl font-bold text-white mb-2">{t('dev_global_title')}</h2>
+                    <h2 className="text-2xl font-bold text-white mb-2">{t('dev_global_title')}</h2>
                     <p className="text-gray-300 text-lg">{t('dev_global_desc')}</p>
                     <p className="text-gray-300">
                         {t('dev_global_detail')}
