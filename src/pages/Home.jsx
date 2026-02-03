@@ -19,13 +19,13 @@ const FeatureCard = ({ image, title, desc, delay }) => (
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ delay, duration: 0.5 }}
-        className="relative group rounded-3xl overflow-hidden bg-white shadow-xl hover:shadow-2xl transition-all border border-gray-100"
+        className="relative group rounded-2xl md:rounded-3xl overflow-hidden bg-white shadow-xl hover:shadow-2xl transition-all border border-gray-100"
     >
         <div className="aspect-[4/5] overflow-hidden bg-gray-100 relative">
             <img src={image} alt={title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-8">
-                <h3 className="text-2xl font-bold text-white mb-2">{title}</h3>
-                <p className="text-gray-200 font-medium">{desc}</p>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-6 md:p-8">
+                <h3 className="text-xl md:text-2xl font-bold text-white mb-1 md:mb-2">{title}</h3>
+                <p className="text-gray-200 font-medium text-sm md:text-base">{desc}</p>
             </div>
         </div>
     </motion.div>
@@ -54,13 +54,13 @@ const LiveTicker = ({ t }) => {
     }, []);
 
     return (
-        <div className="flex items-center gap-3 bg-white/80 px-5 py-3 rounded-full border border-orange-100 shadow-sm backdrop-blur-md">
-            <span className="relative flex h-3 w-3">
+        <div className="flex items-center justify-center gap-2 md:gap-3 bg-white/80 px-3 py-2 md:px-5 md:py-3 rounded-full border border-orange-100 shadow-sm backdrop-blur-md">
+            <span className="relative flex h-2.5 w-2.5 md:h-3 md:w-3 shrink-0">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-3 w-3 bg-orange-500"></span>
+                <span className="relative inline-flex rounded-full h-full w-full bg-orange-500"></span>
             </span>
-            <span className="text-sm font-medium text-gray-600">
-                {t('live_ticker_prefix')} <span className="font-bold text-orange-600 font-mono text-lg">{count.toLocaleString()}</span> {t('live_ticker_suffix')}
+            <span className="text-xs md:text-sm font-medium text-gray-600 whitespace-nowrap">
+                {t('live_ticker_prefix')} <span className="font-bold text-orange-600 font-mono text-sm md:text-lg">{count.toLocaleString()}</span> {t('live_ticker_suffix')}
             </span>
         </div>
     );
@@ -92,53 +92,53 @@ const Home = () => {
             ></div>
 
             {/* Hero Section */}
-            <section className="relative min-h-[90vh] flex items-center pt-20 overflow-hidden">
+            <section className="relative min-h-[auto] md:min-h-[90vh] flex items-center pt-8 pb-12 md:pt-20 md:pb-0 overflow-hidden">
                 <div className="container mx-auto px-4 z-10">
-                    <div className="flex flex-col md:flex-row items-center gap-16">
-                        <div className="flex-1 text-center md:text-left space-y-8">
+                    <div className="flex flex-col md:flex-row items-center gap-8 md:gap-16">
+                        <div className="flex-1 text-center md:text-left space-y-6 md:space-y-8">
                             <motion.div
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.6 }}
                             >
-                                <div className="mb-8 inline-block">
+                                <div className="mb-4 md:mb-8 inline-block max-w-full">
                                     <LiveTicker t={t} />
                                 </div>
 
-                                <h1 className="text-3xl md:text-5xl font-bold mb-6 text-gray-900 leading-[1.1] tracking-tight">
+                                <h1 className="text-2xl md:text-5xl font-bold mb-4 md:mb-6 text-gray-900 leading-tight tracking-tight whitespace-pre-line">
                                     {t('hero_title')}
                                 </h1>
-                                <p className="text-lg text-gray-500 mb-10 max-w-xl mx-auto md:mx-0 font-medium leading-relaxed">
+                                <p className="text-base md:text-lg text-gray-500 mb-8 md:mb-10 max-w-xl mx-auto md:mx-0 font-medium leading-relaxed">
                                     {t('hero_subtitle')}
                                 </p>
-                                <div className="flex flex-col sm:flex-row items-center gap-6 justify-center md:justify-start">
+                                <div className="flex flex-col sm:flex-row items-center gap-4 md:gap-6 justify-center md:justify-start">
                                     <a
                                         href="https://spot.painori.com"
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="px-8 py-4 bg-orange-500 text-white rounded-2xl font-bold text-lg hover:bg-orange-600 transition-all shadow-lg hover:shadow-orange-500/30 flex items-center justify-center gap-2 transform hover:-translate-y-1"
+                                        className="px-6 py-3 md:px-8 md:py-4 bg-orange-500 text-white rounded-2xl font-bold text-base md:text-lg hover:bg-orange-600 transition-all shadow-lg hover:shadow-orange-500/30 flex items-center justify-center gap-2 transform hover:-translate-y-1"
                                     >
-                                        <Zap size={20} />
+                                        <Zap size={18} />
                                         {t('hero_cta', 'Start SPOT GO')}
                                     </a>
 
                                     {/* Helper Text for CTA instead of a button */}
                                     <div className="flex items-center gap-2 text-gray-500 font-medium animate-pulse">
-                                        <ArrowRight size={16} className="text-orange-400" />
-                                        <span className="text-sm">{t('hero_demo_helper', 'No download required')}</span>
+                                        <ArrowRight size={14} className="text-orange-400" />
+                                        <span className="text-xs md:text-sm">{t('hero_demo_helper', 'No download required')}</span>
                                     </div>
                                 </div>
                             </motion.div>
                         </div>
 
-                        <div className="flex-1 w-full max-w-[500px] md:max-w-full flex justify-center perspective-1000">
+                        <div className="flex-1 w-full max-w-[320px] md:max-w-full flex justify-center perspective-1000 mt-8 md:mt-0">
                             {/* Hero Image - Floating Owl (Cropped Height) */}
                             <motion.div
                                 style={{ y: y1 }}
                                 initial={{ opacity: 0, scale: 0.9 }}
                                 animate={{ opacity: 1, scale: 1 }}
                                 transition={{ duration: 1, delay: 0.2 }}
-                                className="relative w-[300px] md:w-[420px] aspect-[4/5.5] rounded-[3rem] overflow-hidden shadow-2xl border-4 border-white/20"
+                                className="relative w-[240px] md:w-[420px] aspect-[4/5.5] rounded-[2rem] md:rounded-[3rem] overflow-hidden shadow-2xl border-4 border-white/20"
                             >
                                 {/* Glow Effect */}
                                 <div className="absolute inset-0 bg-orange-500/10 blur-[80px] rounded-full pointer-events-none"></div>
@@ -155,14 +155,14 @@ const Home = () => {
             </section>
 
             {/* 3-Step Features Section (Explore -> Own -> Enjoy) */}
-            <section className="py-24 relative z-10">
+            <section className="py-12 md:py-24 relative z-10">
                 <div className="container mx-auto px-4">
-                    <div className="text-center mb-16">
-                        <span className="text-orange-500 font-bold uppercase tracking-wider text-sm mb-2 block">{t('how_it_works')}</span>
-                        <h2 className="text-3xl font-bold text-gray-900">{t('main_feature_title')}</h2>
+                    <div className="text-center mb-10 md:mb-16">
+                        <span className="text-orange-500 font-bold uppercase tracking-wider text-xs md:text-sm mb-2 block">{t('how_it_works')}</span>
+                        <h2 className="text-2xl md:text-3xl font-bold text-gray-900">{t('main_feature_title')}</h2>
                     </div>
 
-                    <div className="grid md:grid-cols-3 gap-8 md:gap-12">
+                    <div className="grid md:grid-cols-3 gap-6 md:gap-12">
                         <FeatureCard
                             image={featureExploreImage}
                             title={t('feature_explore_title')}
@@ -186,12 +186,12 @@ const Home = () => {
             </section>
 
             {/* Community Feed / Latest Updates */}
-            <section className="py-24 bg-gray-50/50 border-t border-gray-100 relative z-10">
+            <section className="py-16 md:py-24 bg-gray-50/50 border-t border-gray-100 relative z-10">
                 <div className="container mx-auto px-4">
-                    <div className="flex justify-between items-end mb-12">
+                    <div className="flex justify-between items-end mb-8 md:mb-12">
                         <div>
-                            <h2 className="text-2xl font-bold mb-3 text-gray-900">{t('trend_title')}</h2>
-                            <p className="text-gray-500 text-lg">{t('trend_desc')}</p>
+                            <h2 className="text-xl md:text-2xl font-bold mb-2 md:mb-3 text-gray-900">{t('trend_title')}</h2>
+                            <p className="text-gray-500 text-sm md:text-lg">{t('trend_desc')}</p>
                         </div>
                         <Link to="/lounge" className="hidden md:flex items-center gap-2 text-orange-600 font-bold hover:text-orange-700 transition-colors">
                             {t('enter_lounge')} <ArrowRight size={20} />

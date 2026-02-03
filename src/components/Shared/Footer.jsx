@@ -40,11 +40,6 @@ const Footer = () => {
         <footer id="contact" className="bg-navy-900 text-gray-300 py-8 border-t border-white/5 relative overflow-hidden">
             <div className="container mx-auto px-4 text-center relative">
 
-                {/* Visitor Counter: Mobile (Stacked) / Desktop (Absolute Left) */}
-                <div className="relative mb-6 md:mb-0 md:absolute md:top-0 md:left-0 z-10 flex justify-center md:block">
-                    <VisitorCounter />
-                </div>
-
                 {/* Main Content */}
                 <div className="">
                     <h2 className="text-2xl font-bold text-white mb-2 relative z-0">Painori</h2>
@@ -65,9 +60,14 @@ const Footer = () => {
                     Built by a solo developer with AI superpowers
                 </p>
 
-                <p className="text-xs text-gray-600">
+                <p className="text-xs text-gray-600 mb-6">
                     © 2025 Painori. All Rights Reserved. Painori is an independently operated third-party project.
                 </p>
+
+                {/* Visitor Counter: Mobile (Bottom) / Desktop (Absolute Left) */}
+                <div className="relative mt-4 md:mt-0 md:absolute md:top-0 md:left-0 z-10 flex justify-center md:block">
+                    <VisitorCounter />
+                </div>
             </div>
 
             {/* General Legal Modal */}
